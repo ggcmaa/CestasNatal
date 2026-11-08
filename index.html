@@ -5,136 +5,208 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://*.supabase.co; base-uri 'none'; form-action 'none'">
 <title>CMAA · Entrega de Cestas de Natal</title>
+<link rel="icon" href="CMAA.png">
 <style>
 :root{
-  --preto:rgba(26,26,26,1);
-  --verde-escuro:rgba(12,104,48,1);
-  --verde:rgba(46,155,63,1);
-  --lima:rgba(141,198,63,1);
-  --fundo:rgba(255,255,255,1);
-  --card:rgba(244,248,243,1);
-  --borda:rgba(46,155,63,.25);
-  --texto:var(--preto);
-  --erro:rgba(190,35,35,1);
-  --sombra:rgba(12,104,48,.12);
+  /* Paleta extraída do logo da CMAA */
+  --preto:rgba(20,22,20,1);
+  --verde-escuro:rgba(14,122,64,1);
+  --verde-medio:rgba(88,150,74,1);
+  --lima:rgba(190,210,100,1);
+  --fundo:rgba(246,248,245,1);
+  --superficie:rgba(255,255,255,1);
+  --linha:rgba(20,22,20,.12);
+  --texto:rgba(20,22,20,1);
+  --texto-suave:rgba(20,22,20,.62);
+  --acento:var(--verde-escuro);
+  --acento-texto:rgba(255,255,255,1);
+  --zebra:rgba(14,122,64,.045);
+  --ok-fundo:rgba(14,122,64,.1);
+  --erro:rgba(180,32,32,1);
+  --erro-fundo:rgba(180,32,32,.08);
+  --foco:rgba(14,122,64,.35);
+  --faixa:linear-gradient(90deg,rgba(190,210,100,0),var(--lima) 25%,var(--verde-medio) 65%,var(--verde-escuro));
 }
 @media (prefers-color-scheme:dark){:root{
-  --preto:rgba(240,244,238,1);
-  --fundo:rgba(16,22,17,1);
-  --card:rgba(26,36,28,1);
-  --borda:rgba(141,198,63,.28);
-  --erro:rgba(255,120,120,1);
-  --sombra:rgba(0,0,0,.4);
+  --fundo:rgba(14,19,15,1);
+  --superficie:rgba(23,30,25,1);
+  --linha:rgba(255,255,255,.12);
+  --texto:rgba(236,241,234,1);
+  --texto-suave:rgba(236,241,234,.65);
+  --acento:rgba(46,160,92,1);
+  --zebra:rgba(190,210,100,.05);
+  --ok-fundo:rgba(46,160,92,.18);
+  --erro:rgba(255,128,128,1);
+  --erro-fundo:rgba(255,128,128,.1);
+  --foco:rgba(190,210,100,.45);
 }}
 *{box-sizing:border-box}
 html,body{margin:0}
-body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh}
-header{background:linear-gradient(100deg,var(--verde-escuro),var(--verde) 60%,var(--lima));color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
-header .logo{background:#fff;border-radius:10px;padding:4px 10px;display:flex}
-header .logo svg{height:38px;width:auto}
-#quem{font-size:.85rem;text-align:right}
-main{max-width:760px;margin:0 auto;padding:20px 16px 40px}
-.card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:20px;box-shadow:0 4px 14px var(--sombra)}
-h1{font-size:1.25rem;margin:0 0 4px;color:var(--verde-escuro)}
-@media (prefers-color-scheme:dark){h1{color:var(--lima)}}
-p.sub{margin:0 0 16px;opacity:.75;font-size:.9rem}
-label{display:block;font-weight:600;font-size:.85rem;margin:14px 0 6px}
-input{width:100%;padding:12px;font-size:1rem;border:1.5px solid var(--borda);border-radius:10px;background:var(--fundo);color:var(--texto)}
-input:focus{outline:3px solid rgba(141,198,63,.5);border-color:var(--verde)}
-input[readonly]{opacity:.8}
-button{cursor:pointer;border:0;border-radius:10px;padding:12px 18px;font-size:1rem;font-weight:700;color:#fff;background:linear-gradient(100deg,var(--verde-escuro),var(--verde));width:100%;margin-top:18px}
-button:hover{filter:brightness(1.08)}
-button:disabled{opacity:.6;cursor:wait}
-button.sec{background:transparent;color:var(--verde-escuro);border:1.5px solid var(--verde);width:auto;margin:0;padding:8px 14px;font-size:.85rem}
-@media (prefers-color-scheme:dark){button.sec{color:var(--lima);border-color:var(--lima)}}
-header button.sec{color:#fff;border-color:rgba(255,255,255,.8);margin-top:4px}
-nav{display:flex;gap:8px;margin-bottom:16px}
-nav button{margin:0;background:transparent;color:var(--texto);border:1.5px solid var(--borda)}
-nav button.on{background:linear-gradient(100deg,var(--verde-escuro),var(--verde));color:#fff;border-color:transparent}
-.msg{margin-top:14px;padding:10px 12px;border-radius:10px;font-size:.9rem;display:none}
-.msg.ok{display:block;background:rgba(141,198,63,.22);border:1px solid var(--lima)}
-.msg.err{display:block;background:rgba(190,35,35,.1);border:1px solid var(--erro);color:var(--erro)}
-.tw{overflow-x:auto;margin-top:14px}
-table{width:100%;border-collapse:collapse;font-size:.9rem}
-th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--borda);white-space:nowrap}
-th{color:var(--verde-escuro)}
-@media (prefers-color-scheme:dark){th{color:var(--lima)}}
-.row{display:flex;gap:8px;align-items:end}
-.row>div{flex:1}
-.row button{width:auto;margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column;line-height:1.45}
+.num{font-variant-numeric:tabular-nums}
+
+/* Topo */
+header{background:var(--superficie);border-bottom:1px solid var(--linha);position:relative}
+header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px;background:var(--faixa)}
+.topo{max-width:960px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.marca{display:flex;align-items:center;gap:14px;min-width:0}
+.marca .placa{background:#fff;border-radius:8px;padding:4px 8px;display:flex}
+.marca img{height:42px;width:auto;display:block}
+.marca span{font-weight:600;font-size:.95rem;color:var(--texto-suave);border-left:1px solid var(--linha);padding-left:14px;line-height:1.2}
+.usuario{display:flex;align-items:center;gap:10px}
+.chip{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem;background:var(--fundo);border:1px solid var(--linha);border-radius:999px;padding:6px 12px 6px 8px}
+.chip svg{width:20px;height:20px;color:var(--acento)}
+
+/* Estrutura */
+main{flex:1;width:100%;max-width:960px;margin:0 auto;padding:28px 20px 40px}
+footer{text-align:center;font-size:.8rem;color:var(--texto-suave);padding:18px 20px 26px}
+h1{font-size:1.5rem;line-height:1.2;margin:0 0 6px;letter-spacing:-.01em}
+p.sub{margin:0 0 22px;color:var(--texto-suave);font-size:.95rem;max-width:62ch}
+.painel{background:var(--superficie);border:1px solid var(--linha);border-radius:10px;padding:24px}
+
+/* Login */
+#vLogin{max-width:420px;margin:24px auto 0}
+#vLogin .painel{padding:30px 28px 28px;border-top:4px solid var(--verde-escuro)}
+#vLogin .logo-grande{display:flex;justify-content:center;margin-bottom:22px}
+#vLogin .logo-grande .placa{background:#fff;border-radius:10px;padding:8px 14px;display:flex}
+#vLogin .logo-grande img{width:230px;max-width:100%;height:auto;display:block}
+#vLogin h1{text-align:center;font-size:1.3rem}
+#vLogin p.sub{text-align:center;margin-left:auto;margin-right:auto}
+
+/* Formulários */
+label{display:block;font-weight:600;font-size:.88rem;margin:16px 0 6px}
+input{width:100%;min-height:46px;padding:10px 12px;font:inherit;font-size:1rem;border:1.5px solid var(--linha);border-radius:8px;background:var(--superficie);color:var(--texto);transition:border-color .15s,box-shadow .15s}
+input::placeholder{color:var(--texto-suave);opacity:.7}
+input:focus-visible{outline:none;border-color:var(--acento);box-shadow:0 0 0 4px var(--foco)}
+input[readonly]{background:var(--fundo);color:var(--texto-suave);cursor:default}
+.campo-grande{font-size:1.35rem;font-weight:600;letter-spacing:.02em;min-height:56px}
+.dois{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.dois{grid-template-columns:1fr}}
+.btn{cursor:pointer;border:0;border-radius:8px;min-height:48px;padding:0 20px;font:inherit;font-weight:700;font-size:1rem;color:var(--acento-texto);background:var(--acento);width:100%;margin-top:22px;transition:filter .15s,transform .05s}
+.btn:hover{filter:brightness(1.1)}
+.btn:active{transform:translateY(1px)}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn:focus-visible,.tab:focus-visible,.btn-sec:focus-visible{outline:3px solid var(--foco);outline-offset:2px}
+.btn-sec{cursor:pointer;font:inherit;font-weight:600;font-size:.88rem;color:var(--texto);background:transparent;border:1.5px solid var(--linha);border-radius:8px;min-height:36px;padding:0 14px}
+.btn-sec:hover{border-color:var(--acento);color:var(--acento)}
+
+/* Abas */
+.abas{display:flex;gap:4px;border-bottom:1px solid var(--linha);margin-bottom:22px}
+.tab{cursor:pointer;font:inherit;font-weight:600;font-size:.95rem;color:var(--texto-suave);background:none;border:0;border-bottom:3px solid transparent;padding:10px 16px;margin-bottom:-1px}
+.tab:hover{color:var(--texto)}
+.tab[aria-selected="true"]{color:var(--acento);border-bottom-color:var(--acento)}
+
+/* Mensagens */
+.msg{display:none;margin-top:18px;padding:12px 14px;border-radius:8px;font-size:.95rem;border-left:4px solid}
+.msg.ok{display:block;background:var(--ok-fundo);border-color:var(--acento)}
+.msg.err{display:block;background:var(--erro-fundo);border-color:var(--erro);color:var(--erro)}
+.msg strong{display:block;margin-bottom:2px}
+
+/* Consulta */
+.barra{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
+.barra .f{flex:1;min-width:200px}
+.barra label{margin-top:0}
+.barra .btn{width:auto;margin:0;min-width:120px}
+.resumo{margin:20px 0 8px;font-size:.9rem;color:var(--texto-suave)}
+.tw{overflow-x:auto;border:1px solid var(--linha);border-radius:8px}
+table{width:100%;border-collapse:collapse;font-size:.93rem}
+th,td{text-align:left;padding:11px 14px;white-space:nowrap}
+thead th{background:var(--fundo);font-weight:700;font-size:.85rem;color:var(--texto-suave);border-bottom:1px solid var(--linha)}
+tbody tr:nth-child(even){background:var(--zebra)}
+tbody td{border-bottom:1px solid var(--linha)}
+tbody tr:last-child td{border-bottom:0}
+.vazio{padding:28px 14px;text-align:center;color:var(--texto-suave)}
 .hide{display:none!important}
+@media(max-width:560px){.marca span{display:none}.marca img{height:36px}main{padding-top:20px}.painel{padding:18px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <header>
-  <div class="logo">
-  <img src="CMAA.png" alt="CMAA - Energia que transforma">
-</div>
-    <svg viewBox="0 0 250 80" xmlns="http://www.w3.org/2000/svg" role="img">
-      <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#d8eab8"/><stop offset=".5" stop-color="#8dc63f"/><stop offset="1" stop-color="#0c6830"/></linearGradient></defs>
-      <text x="125" y="36" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="38" fill="#1a1a1a" letter-spacing="1">CMAA</text>
-      <path d="M8 50 Q120 38 245 52 Q130 46 8 54Z M20 56 Q130 44 232 58 Q130 52 20 59Z M36 62 Q130 52 215 64 Q130 58 36 65Z" fill="url(#g)"/>
-      <text x="125" y="78" text-anchor="middle" font-family="Arial,sans-serif" font-weight="600" font-size="13" fill="#1a1a1a">Energia que transforma</text>
-    </svg>
+  <div class="topo">
+    <div class="marca">
+      <div class="placa"><img src="CMAA.png" alt="CMAA - Cia Mineira de Açúcar e Álcool"></div>
+      <span>Entrega de cestas de Natal</span>
+    </div>
+    <div id="quem" class="usuario hide">
+      <div class="chip">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.2-8 5v1h16v-1c0-2.8-3.6-5-8-5Z"/></svg>
+        <span id="usuario" class="num"></span>
+      </div>
+      <button class="btn-sec" id="sair" type="button">Sair</button>
+    </div>
   </div>
-  <div id="quem" class="hide"><div id="usuario"></div><button class="sec" id="sair" type="button">Sair</button></div>
 </header>
 
 <main>
   <!-- LOGIN -->
-  <section id="vLogin" class="card hide">
-    <h1>Entrar</h1>
-    <p class="sub">Acesso restrito a usuários autorizados.</p>
-    <label for="lUsuario">Usuário (C + matrícula)</label>
-    <input id="lUsuario" type="text" autocomplete="username" maxlength="21" placeholder="Ex.: C12345" autocapitalize="characters" required>
-    <label for="lSenha">Senha</label>
-    <input id="lSenha" type="password" autocomplete="current-password" required>
-    <button id="bLogin" type="button">Entrar</button>
-    <div id="mLogin" class="msg"></div>
+  <section id="vLogin" class="hide">
+    <div class="painel">
+      <div class="logo-grande"><div class="placa"><img src="CMAA.png" alt="CMAA - Cia Mineira de Açúcar e Álcool"></div></div>
+      <h1>Acesse o sistema</h1>
+      <p class="sub">Entre com seu usuário (a letra C seguida da matrícula) e sua senha.</p>
+      <label for="lUsuario">Usuário</label>
+      <input id="lUsuario" type="text" autocomplete="username" maxlength="21" placeholder="C12345" autocapitalize="characters" spellcheck="false" required>
+      <label for="lSenha">Senha</label>
+      <input id="lSenha" type="password" autocomplete="current-password" required>
+      <button id="bLogin" class="btn" type="button">Entrar</button>
+      <div id="mLogin" class="msg" role="alert"></div>
+    </div>
   </section>
 
   <!-- APP -->
   <section id="vApp" class="hide">
-    <nav>
-      <button id="tEntrega" class="on" type="button">Registrar entrega</button>
-      <button id="tConsulta" type="button">Consultar entregas</button>
-    </nav>
-
-    <div id="pEntrega" class="card">
-      <h1>Entrega de cesta de Natal</h1>
-      <p class="sub">Data e hora são registradas no momento do envio (horário de Brasília).</p>
-      <label for="fMat">Matrícula</label>
-      <input id="fMat" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="Digite a matrícula">
-      <label for="fData">Data e hora da entrega (Brasília)</label>
-      <input id="fData" readonly>
-      <label for="fResp">Responsável pela entrega</label>
-      <input id="fResp" readonly>
-      <button id="bEnviar" type="button">Registrar entrega</button>
-      <div id="mEntrega" class="msg"></div>
+    <div class="abas" role="tablist">
+      <button id="tEntrega" class="tab" role="tab" aria-selected="true" type="button">Registrar entrega</button>
+      <button id="tConsulta" class="tab" role="tab" aria-selected="false" type="button">Consultar entregas</button>
     </div>
 
-    <div id="pConsulta" class="card hide">
-      <h1>Entregas registradas</h1>
-      <p class="sub" id="subC">Exibindo as entregas permitidas para o seu usuário.</p>
-      <div class="row">
-        <div><label for="qMat">Filtrar por matrícula</label><input id="qMat" maxlength="20" autocomplete="off"></div>
-        <button id="bBuscar" type="button">Buscar</button>
+    <div id="pEntrega">
+      <h1>Registrar entrega</h1>
+      <p class="sub">Informe a matrícula do colaborador. A data e a hora são gravadas automaticamente no momento do envio, no horário de Brasília.</p>
+      <div class="painel">
+        <label for="fMat" style="margin-top:0">Matrícula do colaborador</label>
+        <input id="fMat" class="campo-grande num" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="Digite a matrícula">
+        <div class="dois">
+          <div><label for="fData">Data e hora (Brasília)</label><input id="fData" class="num" readonly tabindex="-1"></div>
+          <div><label for="fResp">Responsável pela entrega</label><input id="fResp" class="num" readonly tabindex="-1"></div>
+        </div>
+        <button id="bEnviar" class="btn" type="button">Registrar entrega</button>
+        <div id="mEntrega" class="msg" role="status"></div>
       </div>
-      <div id="mConsulta" class="msg"></div>
-      <div class="tw"><table><thead><tr><th>Matrícula</th><th>Data/hora (Brasília)</th><th>Responsável</th></tr></thead><tbody id="tb"></tbody></table></div>
+    </div>
+
+    <div id="pConsulta" class="hide">
+      <h1>Entregas registradas</h1>
+      <p class="sub" id="subC">Você vê as entregas registradas com o seu usuário. Administradores veem todas.</p>
+      <div class="painel">
+        <div class="barra">
+          <div class="f"><label for="qMat">Buscar por matrícula</label><input id="qMat" class="num" maxlength="20" autocomplete="off" placeholder="Todas as matrículas"></div>
+          <button id="bBuscar" class="btn" type="button">Buscar</button>
+        </div>
+        <div id="mConsulta" class="msg" role="alert"></div>
+        <div id="resumo" class="resumo num"></div>
+        <div class="tw">
+          <table>
+            <thead><tr><th>Matrícula</th><th>Data e hora (Brasília)</th><th>Responsável</th></tr></thead>
+            <tbody id="tb"></tbody>
+          </table>
+          <div id="vazio" class="vazio hide">Nenhuma entrega encontrada.</div>
+        </div>
+      </div>
     </div>
   </section>
 </main>
+<footer>CMAA · Cia Mineira de Açúcar e Álcool · Uso interno</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script>
-/* ====== CONFIGURE AQUI (Project Settings > API) — use APENAS a chave anon/publishable ====== */
+/* ====== CONFIGURAÇÃO (use APENAS a chave anon/publishable) ====== */
 const SUPABASE_URL = "https://ndextmemwshpfoklccnk.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_t9tSxZpwZWtXNrvJyZ2GjA_b7ViZpIP";
-// O Supabase Auth exige e-mail; o usuário "C12345" vira "c12345@DOMINIO" internamente (nenhum e-mail é enviado).
-// Use o MESMO domínio ao criar os usuários no painel.
+// O Supabase Auth exige e-mail: o usuário "C12345" vira "c12345@DOMINIO" internamente (nada é enviado).
 const DOMINIO = "cmaa.ind.br";
-/* ========================================================================================== */
+/* ================================================================ */
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth:{ persistSession:true, autoRefreshToken:true } });
 const $ = id => document.getElementById(id);
@@ -142,13 +214,19 @@ const fmt = new Intl.DateTimeFormat("pt-BR",{timeZone:"America/Sao_Paulo",dateSt
 let user = null, timer = null;
 
 const nomeUsuario = u => String(u.email||"").split("@")[0].toUpperCase();
-function msg(id, texto, tipo){ const e=$(id); e.textContent=texto||""; e.className="msg"+(texto?" "+tipo:""); }
+function msg(id, titulo, texto, tipo){
+  const e=$(id); e.replaceChildren(); e.className="msg";
+  if(!titulo) return;
+  e.classList.add(tipo);
+  if(texto){ const s=document.createElement("strong"); s.textContent=titulo; e.append(s, texto); }
+  else e.textContent=titulo;
+}
 function erroAmigavel(e){
   const m=(e&&e.message)||"";
   if(e&&(e.code==="PT429"||/Limite de 100/i.test(m)||e.status===429)) return "Limite de 100 requisições por hora atingido. Tente novamente mais tarde.";
   if(e&&e.code==="23505") return "Esta matrícula já teve a cesta entregue.";
-  if(e&&e.code==="23514") return "Matrícula inválida (use de 3 a 20 letras/números).";
-  if(e&&(e.code==="42501"||e.status===401||e.status===403)) return "Sem permissão para esta operação.";
+  if(e&&e.code==="23514") return "Matrícula inválida. Use de 3 a 20 letras ou números.";
+  if(e&&(e.code==="42501"||e.status===401||e.status===403)) return "Você não tem permissão para esta operação.";
   return "Não foi possível concluir. Tente novamente.";
 }
 
@@ -160,31 +238,33 @@ function mostrar(logado){
   if(logado){
     $("usuario").textContent=nomeUsuario(user); $("fResp").value=nomeUsuario(user);
     const tick=()=>{$("fData").value=fmt.format(new Date())}; tick(); timer=setInterval(tick,1000);
-  }
+    aba(false);
+  } else { $("lUsuario").focus(); }
 }
 
 $("bLogin").onclick = async () => {
   msg("mLogin","");
   const usuario=$("lUsuario").value.trim().toLowerCase(), password=$("lSenha").value;
-  if(!usuario||!password) return msg("mLogin","Informe usuário e senha.","err");
-  if(!/^c[0-9a-z]{3,20}$/.test(usuario)) return msg("mLogin","Usuário deve ser a letra C seguida da matrícula.","err");
-  const email=usuario+"@"+DOMINIO;
+  if(!usuario||!password) return msg("mLogin","Informe usuário e senha.","","err");
+  if(!/^c[0-9a-z]{3,20}$/.test(usuario)) return msg("mLogin","O usuário é a letra C seguida da matrícula.","","err");
+  const email=usuario+"@"+DOMINIO.replace(/^@/,"");
   $("bLogin").disabled=true;
   const {data,error}=await sb.auth.signInWithPassword({email,password});
   $("bLogin").disabled=false;
-  if(error) return msg("mLogin","Usuário ou senha inválidos.","err");
+  if(error) return msg("mLogin","Usuário ou senha inválidos.","","err");
   user=data.user; $("lSenha").value=""; mostrar(true);
 };
 $("lSenha").addEventListener("keydown",e=>{if(e.key==="Enter")$("bLogin").click()});
+$("lUsuario").addEventListener("keydown",e=>{if(e.key==="Enter")$("lSenha").focus()});
 
 $("sair").onclick = async () => { await sb.auth.signOut(); user=null; $("tb").replaceChildren(); mostrar(false); };
 
 function aba(consulta){
   $("pEntrega").classList.toggle("hide",consulta);
   $("pConsulta").classList.toggle("hide",!consulta);
-  $("tEntrega").classList.toggle("on",!consulta);
-  $("tConsulta").classList.toggle("on",consulta);
-  if(consulta) buscar();
+  $("tEntrega").setAttribute("aria-selected",String(!consulta));
+  $("tConsulta").setAttribute("aria-selected",String(consulta));
+  if(consulta) buscar(); else $("fMat").focus();
 }
 $("tEntrega").onclick=()=>aba(false);
 $("tConsulta").onclick=()=>aba(true);
@@ -192,31 +272,33 @@ $("tConsulta").onclick=()=>aba(true);
 $("bEnviar").onclick = async () => {
   msg("mEntrega","");
   const matricula=$("fMat").value.trim();
-  if(!/^[0-9A-Za-z]{3,20}$/.test(matricula)) return msg("mEntrega","Informe uma matrícula válida (3 a 20 letras/números).","err");
+  if(!/^[0-9A-Za-z]{3,20}$/.test(matricula)) return msg("mEntrega","Informe uma matrícula válida (3 a 20 letras ou números).","","err");
   $("bEnviar").disabled=true;
-  // data/hora e responsável são definidos no servidor (now() e auth.uid()), não podem ser alterados pelo navegador
+  // data/hora e responsável são definidos no servidor (now() e auth.uid()); o navegador não consegue alterá-los
   const {data,error}=await sb.from("entregas").insert({matricula}).select("matricula,entregue_em").single();
   $("bEnviar").disabled=false;
-  if(error) return msg("mEntrega",erroAmigavel(error),"err");
-  msg("mEntrega",`Entrega registrada: matrícula ${data.matricula} em ${fmt.format(new Date(data.entregue_em))}.`,"ok");
+  if(error) return msg("mEntrega",erroAmigavel(error),"","err");
+  msg("mEntrega","Entrega registrada",`Matrícula ${data.matricula}, em ${fmt.format(new Date(data.entregue_em))}.`,"ok");
   $("fMat").value=""; $("fMat").focus();
 };
+$("fMat").addEventListener("keydown",e=>{if(e.key==="Enter")$("bEnviar").click()});
 
 async function buscar(){
   msg("mConsulta","");
   const q=$("qMat").value.trim();
   let req=sb.from("entregas").select("matricula,entregue_em,entregue_por_usuario").order("entregue_em",{ascending:false}).limit(200);
-  if(q){ if(!/^[0-9A-Za-z]{1,20}$/.test(q)) return msg("mConsulta","Filtro inválido.","err"); req=req.eq("matricula",q); }
+  if(q){ if(!/^[0-9A-Za-z]{1,20}$/.test(q)) return msg("mConsulta","Matrícula inválida para busca.","","err"); req=req.eq("matricula",q); }
   $("bBuscar").disabled=true;
   const {data,error}=await req;
   $("bBuscar").disabled=false;
-  if(error) return msg("mConsulta",erroAmigavel(error),"err");
+  if(error) return msg("mConsulta",erroAmigavel(error),"","err");
   const tb=$("tb"); tb.replaceChildren();
-  if(!data.length) return msg("mConsulta","Nenhuma entrega encontrada.","ok");
+  $("vazio").classList.toggle("hide",data.length>0);
+  $("resumo").textContent = data.length ? `${data.length} ${data.length===1?"entrega":"entregas"}${data.length===200?" (mostrando as 200 mais recentes)":""}` : "";
   for(const r of data){
     const tr=document.createElement("tr");
     for(const v of [r.matricula,fmt.format(new Date(r.entregue_em)),String(r.entregue_por_usuario||"").toUpperCase()]){
-      const td=document.createElement("td"); td.textContent=v; tr.appendChild(td);
+      const td=document.createElement("td"); td.className="num"; td.textContent=v; tr.appendChild(td);
     }
     tb.appendChild(tr);
   }
@@ -227,7 +309,7 @@ $("qMat").addEventListener("keydown",e=>{if(e.key==="Enter")buscar()});
 sb.auth.getSession().then(({data})=>{
   user=data.session?data.session.user:null; mostrar(!!user);
 });
-sb.auth.onAuthStateChange((ev,s)=>{ if(ev==="SIGNED_OUT"){user=null;mostrar(false);} });
+sb.auth.onAuthStateChange((ev)=>{ if(ev==="SIGNED_OUT"){user=null;mostrar(false);} });
 </script>
 </body>
 </html>
