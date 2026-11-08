@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://*.supabase.co; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; media-src 'self' blob:; connect-src 'self' https://*.supabase.co; base-uri 'none'; form-action 'none'">
 <title>CMAA · Entrega de Cestas de Natal</title>
 <link rel="icon" href="CMAA.png">
 <style>
@@ -69,6 +69,17 @@ input::placeholder{color:var(--texto-suave);opacity:.7}
 input:focus-visible{outline:none;border-color:var(--acento);box-shadow:0 0 0 4px var(--foco)}
 input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
 .campo-grande{font-size:1.35rem;font-weight:600;letter-spacing:.02em;min-height:56px}
+.mat-linha{display:flex;gap:10px}
+.mat-linha input{flex:1;min-width:0}
+.btn-qr{cursor:pointer;display:flex;align-items:center;gap:8px;min-height:56px;padding:0 16px;font:inherit;font-weight:700;font-size:.95rem;color:var(--acento);background:transparent;border:1.5px solid var(--acento);border-radius:8px;white-space:nowrap}
+.btn-qr:hover{background:var(--ok-fundo)}
+.btn-qr:focus-visible{outline:3px solid var(--foco);outline-offset:2px}
+.btn-qr svg{width:22px;height:22px}
+.leitor{margin-top:14px}
+.visor{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:4/3;max-height:60vh;margin:0 auto}
+.visor video{width:100%;height:100%;object-fit:cover;display:block}
+.mira{position:absolute;inset:18%;border:3px solid rgba(190,210,100,.95);border-radius:12px;box-shadow:0 0 0 999px rgba(0,0,0,.38);pointer-events:none}
+.leitor-rodape{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:10px;font-size:.9rem;color:var(--texto-suave)}
 .dois{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:560px){.dois{grid-template-columns:1fr}}
 .btn{cursor:pointer;border:0;border-radius:8px;min-height:48px;padding:0 20px;font:inherit;font-weight:700;font-size:1rem;color:var(--acento-texto);background:var(--acento);width:100%;margin-top:22px;transition:filter .15s,transform .05s}
@@ -155,7 +166,17 @@ tbody tr:last-child td{border-bottom:0}
       <p class="sub">Informe a matrícula do colaborador. A data e a hora são gravadas automaticamente no momento do envio, no horário de Brasília.</p>
       <div class="painel">
         <label for="fMat" style="margin-top:0">Matrícula do colaborador</label>
-        <input id="fMat" class="campo-grande num" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="Digite a matrícula">
+        <div class="mat-linha">
+          <input id="fMat" class="campo-grande num" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="Digite ou leia o QR code">
+          <button id="bQr" class="btn-qr" type="button" aria-label="Ler QR code do crachá">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/><path d="M13 13h4v4"/></svg>
+            <span>Ler crachá</span>
+          </button>
+        </div>
+        <div id="leitor" class="leitor hide">
+          <div class="visor"><video id="video" playsinline muted></video><div class="mira"></div></div>
+          <div class="leitor-rodape"><span>Aponte a câmera para o QR code do crachá.</span><button id="bFechar" class="btn-sec" type="button">Cancelar</button></div>
+        </div>
         <div class="dois">
           <div><label for="fData">Data e hora (Brasília)</label><input id="fData" class="num" readonly tabindex="-1"></div>
           <div><label for="fResp">Responsável pela entrega</label><input id="fResp" class="num" readonly tabindex="-1"></div>
@@ -189,6 +210,7 @@ tbody tr:last-child td{border-bottom:0}
 <footer>CMAA · Cia Mineira de Açúcar e Álcool · Uso interno</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <script>
 /* ====== CONFIGURAÇÃO (use APENAS a chave anon/publishable) ====== */
 const SUPABASE_URL = "https://ndextmemwshpfoklccnk.supabase.co";
@@ -223,7 +245,7 @@ function mostrar(logado){
   $("vLogin").classList.toggle("hide",logado);
   $("vApp").classList.toggle("hide",!logado);
   $("quem").classList.toggle("hide",!logado);
-  clearInterval(timer);
+  clearInterval(timer); pararLeitor();
   if(logado){
     $("usuario").textContent=nomeUsuario(user); $("fResp").value=nomeUsuario(user);
     const tick=()=>{$("fData").value=fmt.format(new Date())}; tick(); timer=setInterval(tick,1000);
@@ -249,6 +271,7 @@ $("lUsuario").addEventListener("keydown",e=>{if(e.key==="Enter")$("lSenha").focu
 $("sair").onclick = async () => { await sb.auth.signOut(); user=null; $("tb").replaceChildren(); mostrar(false); };
 
 function aba(consulta){
+  pararLeitor();
   $("pEntrega").classList.toggle("hide",consulta);
   $("pConsulta").classList.toggle("hide",!consulta);
   $("tEntrega").setAttribute("aria-selected",String(!consulta));
@@ -271,6 +294,59 @@ $("bEnviar").onclick = async () => {
   $("fMat").value=""; $("fMat").focus();
 };
 $("fMat").addEventListener("keydown",e=>{if(e.key==="Enter")$("bEnviar").click()});
+
+/* ===== Leitor de QR code do crachá ===== */
+let stream=null, lendo=false, ultimoQuadro=0, avisou=false;
+const cv=document.createElement("canvas"), ctx=cv.getContext("2d",{willReadFrequently:true});
+function extrairMatricula(txt){
+  const t=String(txt||"").trim();
+  if(/^[0-9A-Za-z]{3,20}$/.test(t)) return t;            // QR contém só a matrícula
+  const nums=t.match(/\d{3,20}/g);                       // QR com texto/URL: usa a maior sequência numérica
+  return nums ? nums.sort((a,b)=>b.length-a.length)[0] : null;
+}
+function pararLeitor(){
+  lendo=false;
+  if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
+  const v=$("video"); if(v) v.srcObject=null;
+  const l=$("leitor"); if(l) l.classList.add("hide");
+}
+async function iniciarLeitor(){
+  msg("mEntrega","");
+  if(typeof jsQR==="undefined") return msg("mEntrega","Leitor indisponível","Não foi possível carregar o leitor de QR code. Verifique a conexão e recarregue a página.","err");
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) return msg("mEntrega","Câmera indisponível","Este navegador não permite usar a câmera. Use um navegador atualizado, com o site aberto por HTTPS.","err");
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1280}},audio:false});
+  }catch(e){
+    const negado=e&&(e.name==="NotAllowedError"||e.name==="SecurityError");
+    return msg("mEntrega",negado?"Acesso à câmera bloqueado":"Câmera não encontrada",negado?"Permita o uso da câmera nas configurações do navegador e tente de novo.":"Verifique se o aparelho tem uma câmera disponível.","err");
+  }
+  const v=$("video"); v.srcObject=stream; await v.play().catch(()=>{});
+  avisou=false; $("leitor").classList.remove("hide"); lendo=true; requestAnimationFrame(varrer);
+}
+function varrer(t){
+  if(!lendo) return;
+  const v=$("video");
+  if(t-ultimoQuadro>110 && v.readyState>=2 && v.videoWidth){
+    ultimoQuadro=t;
+    const esc=Math.min(1,640/v.videoWidth);
+    cv.width=Math.round(v.videoWidth*esc); cv.height=Math.round(v.videoHeight*esc);
+    ctx.drawImage(v,0,0,cv.width,cv.height);
+    const img=ctx.getImageData(0,0,cv.width,cv.height);
+    const r=jsQR(img.data,img.width,img.height,{inversionAttempts:"dontInvert"});
+    if(r&&r.data){
+      const m=extrairMatricula(r.data);
+      if(m){
+        pararLeitor(); $("fMat").value=m; if(navigator.vibrate) navigator.vibrate(120);
+        msg("mEntrega","Matrícula lida: "+m,"Confira o número e toque em Registrar entrega.","ok");
+        $("bEnviar").focus(); return;
+      }
+      if(!avisou){ avisou=true; msg("mEntrega","QR code não reconhecido","O código lido não contém uma matrícula. Tente outro crachá ou digite o número.","err"); }
+    }
+  }
+  requestAnimationFrame(varrer);
+}
+$("bQr").onclick=iniciarLeitor;
+$("bFechar").onclick=pararLeitor;
 
 async function buscar(){
   msg("mConsulta","");
