@@ -13,7 +13,8 @@
   --verde-escuro:rgba(14,122,64,1);
   --verde-medio:rgba(88,150,74,1);
   --lima:rgba(190,210,100,1);
-  --fundo:rgba(246,248,245,1);
+  --fundo:rgba(255,255,255,1);
+  --cinza:rgba(244,247,243,1);
   --superficie:rgba(255,255,255,1);
   --linha:rgba(20,22,20,.12);
   --texto:rgba(20,22,20,1);
@@ -27,19 +28,7 @@
   --foco:rgba(14,122,64,.35);
   --faixa:linear-gradient(90deg,rgba(190,210,100,0),var(--lima) 25%,var(--verde-medio) 65%,var(--verde-escuro));
 }
-@media (prefers-color-scheme:dark){:root{
-  --fundo:rgba(14,19,15,1);
-  --superficie:rgba(23,30,25,1);
-  --linha:rgba(255,255,255,.12);
-  --texto:rgba(236,241,234,1);
-  --texto-suave:rgba(236,241,234,.65);
-  --acento:rgba(46,160,92,1);
-  --zebra:rgba(190,210,100,.05);
-  --ok-fundo:rgba(46,160,92,.18);
-  --erro:rgba(255,128,128,1);
-  --erro-fundo:rgba(255,128,128,.1);
-  --foco:rgba(190,210,100,.45);
-}}
+html{color-scheme:light}
 *{box-sizing:border-box}
 html,body{margin:0}
 body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh;display:flex;flex-direction:column;line-height:1.45}
@@ -50,11 +39,11 @@ header{background:var(--superficie);border-bottom:1px solid var(--linha);positio
 header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px;background:var(--faixa)}
 .topo{max-width:960px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .marca{display:flex;align-items:center;gap:14px;min-width:0}
-.marca .placa{background:#fff;border-radius:8px;padding:4px 8px;display:flex}
+.marca .placa{display:flex}
 .marca img{height:42px;width:auto;display:block}
 .marca span{font-weight:600;font-size:.95rem;color:var(--texto-suave);border-left:1px solid var(--linha);padding-left:14px;line-height:1.2}
 .usuario{display:flex;align-items:center;gap:10px}
-.chip{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem;background:var(--fundo);border:1px solid var(--linha);border-radius:999px;padding:6px 12px 6px 8px}
+.chip{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem;background:var(--cinza);border:1px solid var(--linha);border-radius:999px;padding:6px 12px 6px 8px}
 .chip svg{width:20px;height:20px;color:var(--acento)}
 
 /* Estrutura */
@@ -66,9 +55,9 @@ p.sub{margin:0 0 22px;color:var(--texto-suave);font-size:.95rem;max-width:62ch}
 
 /* Login */
 #vLogin{max-width:420px;margin:24px auto 0}
-#vLogin .painel{padding:30px 28px 28px;border-top:4px solid var(--verde-escuro)}
+#vLogin .painel{padding:30px 28px 28px;border-top:4px solid var(--verde-escuro);box-shadow:0 8px 28px rgba(14,122,64,.12)}
 #vLogin .logo-grande{display:flex;justify-content:center;margin-bottom:22px}
-#vLogin .logo-grande .placa{background:#fff;border-radius:10px;padding:8px 14px;display:flex}
+#vLogin .logo-grande .placa{display:flex}
 #vLogin .logo-grande img{width:230px;max-width:100%;height:auto;display:block}
 #vLogin h1{text-align:center;font-size:1.3rem}
 #vLogin p.sub{text-align:center;margin-left:auto;margin-right:auto}
@@ -78,7 +67,7 @@ label{display:block;font-weight:600;font-size:.88rem;margin:16px 0 6px}
 input{width:100%;min-height:46px;padding:10px 12px;font:inherit;font-size:1rem;border:1.5px solid var(--linha);border-radius:8px;background:var(--superficie);color:var(--texto);transition:border-color .15s,box-shadow .15s}
 input::placeholder{color:var(--texto-suave);opacity:.7}
 input:focus-visible{outline:none;border-color:var(--acento);box-shadow:0 0 0 4px var(--foco)}
-input[readonly]{background:var(--fundo);color:var(--texto-suave);cursor:default}
+input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
 .campo-grande{font-size:1.35rem;font-weight:600;letter-spacing:.02em;min-height:56px}
 .dois{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:560px){.dois{grid-template-columns:1fr}}
@@ -111,7 +100,7 @@ input[readonly]{background:var(--fundo);color:var(--texto-suave);cursor:default}
 .tw{overflow-x:auto;border:1px solid var(--linha);border-radius:8px}
 table{width:100%;border-collapse:collapse;font-size:.93rem}
 th,td{text-align:left;padding:11px 14px;white-space:nowrap}
-thead th{background:var(--fundo);font-weight:700;font-size:.85rem;color:var(--texto-suave);border-bottom:1px solid var(--linha)}
+thead th{background:var(--cinza);font-weight:700;font-size:.85rem;color:var(--texto-suave);border-bottom:1px solid var(--linha)}
 tbody tr:nth-child(even){background:var(--zebra)}
 tbody td{border-bottom:1px solid var(--linha)}
 tbody tr:last-child td{border-bottom:0}
