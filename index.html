@@ -235,10 +235,11 @@ function msg(id, titulo, texto, tipo){
 function erroAmigavel(e){
   const m=(e&&e.message)||"";
   if(e&&(e.code==="PT429"||/Limite de 100/i.test(m)||e.status===429)) return "Limite de 100 requisições por hora atingido. Tente novamente mais tarde.";
-  if(e&&e.code==="23505") return "Esta matrícula já teve a cesta entregue.";
+  if(e&&e.code==="23505") return "Esta matrícula já recebeu a cesta de Natal deste ano.";
   if(e&&e.code==="23514") return "Matrícula inválida. Use de 3 a 20 letras ou números.";
   if(e&&(e.code==="42501"||e.status===401||e.status===403)) return "Você não tem permissão para esta operação.";
-  return "Não foi possível concluir. Tente novamente.";
+  if(e&&(e.code==="42703"||e.code==="42P01"||e.code==="PGRST204"||e.code==="PGRST205")) return "A estrutura do banco está desatualizada. Rode o script supabase_setup.sql atualizado no Supabase.";
+  return `Não foi possível concluir (erro ${(e&&(e.code||e.status))||"desconhecido"}). Tente novamente.`;
 }
 
 function mostrar(logado){
