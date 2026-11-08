@@ -239,7 +239,7 @@ function erroAmigavel(e){
   if(e&&e.code==="23514") return "Matrícula inválida. Use de 3 a 20 letras ou números.";
   if(e&&(e.code==="42501"||e.status===401||e.status===403)) return "Você não tem permissão para esta operação.";
   if(e&&(e.code==="42703"||e.code==="42P01"||e.code==="PGRST204"||e.code==="PGRST205")) return "A estrutura do banco está desatualizada. Rode o script supabase_setup.sql atualizado no Supabase.";
-  return `Não foi possível concluir (erro ${(e&&(e.code||e.status))||"desconhecido"}). Tente novamente.`;
+  return `Não foi possível concluir (erro ${(e&&(e.code||e.status))||"desconhecido"}: ${String((e&&e.message)||"").slice(0,120)}). Tente novamente.`;
 }
 
 function mostrar(logado){
@@ -288,10 +288,11 @@ $("bEnviar").onclick = async () => {
   if(!/^[0-9A-Za-z]{3,20}$/.test(matricula)) return msg("mEntrega","Informe uma matrícula válida (3 a 20 letras ou números).","","err");
   $("bEnviar").disabled=true;
   // data/hora e responsável são definidos no servidor (now() e auth.uid()); o navegador não consegue alterá-los
-  const {data,error}=await sb.from("entregas").insert({matricula}).select("matricula,entregue_em").single();
+  const {data:linhas,error}=await sb.rpc("registrar_entrega",{p_matricula:matricula});
   $("bEnviar").disabled=false;
   if(error) return msg("mEntrega",erroAmigavel(error),"","err");
-  msg("mEntrega","Entrega registrada",`Matrícula ${data.matricula}, em ${fmt.format(new Date(data.entregue_em))}.`,"ok");
+  const r=Array.isArray(linhas)?linhas[0]:linhas;
+  msg("mEntrega","Entrega registrada",`Matrícula ${r.matricula}, em ${fmt.format(new Date(r.entregue_em))}.`,"ok");
   $("fMat").value=""; $("fMat").focus();
 };
 $("fMat").addEventListener("keydown",e=>{if(e.key==="Enter")$("bEnviar").click()});
@@ -352,8 +353,8 @@ $("bFechar").onclick=pararLeitor;
 async function buscar(){
   msg("mConsulta","");
   const q=$("qMat").value.trim();
-  let req=sb.from("entregas").select("matricula,entregue_em,entregue_por_usuario").order("entregue_em",{ascending:false}).limit(200);
-  if(q){ if(!/^[0-9A-Za-z]{1,20}$/.test(q)) return msg("mConsulta","Matrícula inválida para busca.","","err"); req=req.eq("matricula",q); }
+  if(q && !/^[0-9A-Za-z]{1,20}$/.test(q)) return msg("mConsulta","Matrícula inválida para busca.","","err");
+  const req=sb.rpc("listar_entregas",{p_matricula:q||null});
   $("bBuscar").disabled=true;
   const {data,error}=await req;
   $("bBuscar").disabled=false;
