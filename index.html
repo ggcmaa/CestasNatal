@@ -44,7 +44,8 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px
 .marca span{font-weight:600;font-size:.95rem;color:var(--texto-suave);border-left:1px solid var(--linha);padding-left:14px;line-height:1.2}
 .usuario{display:flex;align-items:center;gap:10px}
 .chip{display:flex;align-items:center;gap:8px;font-weight:600;font-size:.9rem;background:var(--cinza);border:1px solid var(--linha);border-radius:999px;padding:6px 12px 6px 8px}
-.chip svg{width:20px;height:20px;color:var(--acento)}
+.chip svg{width:20px;height:20px;color:var(--acento);flex:none}
+.chip span{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* Estrutura */
 main{flex:1;width:100%;max-width:960px;margin:0 auto;padding:28px 20px 40px}
@@ -198,7 +199,7 @@ tbody tr:last-child td{border-bottom:0}
         <div id="resumo" class="resumo num"></div>
         <div class="tw">
           <table>
-            <thead><tr><th>Matrícula</th><th>Data e hora (Brasília)</th><th>Responsável</th></tr></thead>
+            <thead><tr><th>Matrícula</th><th>Data e hora (Brasília)</th><th>Entregue por</th><th>Usuário</th></tr></thead>
             <tbody id="tb"></tbody>
           </table>
           <div id="vazio" class="vazio hide">Nenhuma entrega encontrada.</div>
@@ -225,6 +226,14 @@ const fmt = new Intl.DateTimeFormat("pt-BR",{timeZone:"America/Sao_Paulo",dateSt
 let user = null, timer = null;
 
 const nomeUsuario = u => String(u.email||"").split("@")[0].toUpperCase();
+let nomeCompleto="";
+const identidade = () => nomeCompleto ? `${nomeCompleto} (${nomeUsuario(user)})` : nomeUsuario(user);
+function exibirIdentidade(){ $("usuario").textContent=identidade(); $("fResp").value=identidade(); }
+async function carregarNome(){
+  nomeCompleto=""; exibirIdentidade();
+  const {data,error}=await sb.rpc("nome_do_usuario");
+  if(!error && data){ nomeCompleto=String(data); exibirIdentidade(); }
+}
 function msg(id, titulo, texto, tipo){
   const e=$(id); e.replaceChildren(); e.className="msg";
   if(!titulo) return;
@@ -248,7 +257,7 @@ function mostrar(logado){
   $("quem").classList.toggle("hide",!logado);
   clearInterval(timer); pararLeitor();
   if(logado){
-    $("usuario").textContent=nomeUsuario(user); $("fResp").value=nomeUsuario(user);
+    carregarNome();
     const tick=()=>{$("fData").value=fmt.format(new Date())}; tick(); timer=setInterval(tick,1000);
     aba(false);
   } else { $("lUsuario").focus(); }
@@ -364,7 +373,8 @@ async function buscar(){
   $("resumo").textContent = data.length ? `${data.length} ${data.length===1?"entrega":"entregas"}${data.length===200?" (mostrando as 200 mais recentes)":""}` : "";
   for(const r of data){
     const tr=document.createElement("tr");
-    for(const v of [r.matricula,fmt.format(new Date(r.entregue_em)),String(r.entregue_por_usuario||"").toUpperCase()]){
+    const usr=String(r.entregue_por_usuario||"").toUpperCase();
+    for(const v of [r.matricula,fmt.format(new Date(r.entregue_em)),r.entregue_por_nome||usr,usr]){
       const td=document.createElement("td"); td.className="num"; td.textContent=v; tr.appendChild(td);
     }
     tb.appendChild(tr);
