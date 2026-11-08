@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://*.supabase.co; base-uri 'none'; form-action 'none'">
+<title>CMAA · Entrega de Cestas de Natal</title>
+<style>
+:root{
+  --preto:rgba(26,26,26,1);
+  --verde-escuro:rgba(12,104,48,1);
+  --verde:rgba(46,155,63,1);
+  --lima:rgba(141,198,63,1);
+  --fundo:rgba(255,255,255,1);
+  --card:rgba(244,248,243,1);
+  --borda:rgba(46,155,63,.25);
+  --texto:var(--preto);
+  --erro:rgba(190,35,35,1);
+  --sombra:rgba(12,104,48,.12);
+}
+@media (prefers-color-scheme:dark){:root{
+  --preto:rgba(240,244,238,1);
+  --fundo:rgba(16,22,17,1);
+  --card:rgba(26,36,28,1);
+  --borda:rgba(141,198,63,.28);
+  --erro:rgba(255,120,120,1);
+  --sombra:rgba(0,0,0,.4);
+}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:var(--fundo);color:var(--texto);min-height:100vh}
+header{background:linear-gradient(100deg,var(--verde-escuro),var(--verde) 60%,var(--lima));color:#fff;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+header .logo{background:#fff;border-radius:10px;padding:4px 10px;display:flex}
+header .logo svg{height:38px;width:auto}
+#quem{font-size:.85rem;text-align:right}
+main{max-width:760px;margin:0 auto;padding:20px 16px 40px}
+.card{background:var(--card);border:1px solid var(--borda);border-radius:14px;padding:20px;box-shadow:0 4px 14px var(--sombra)}
+h1{font-size:1.25rem;margin:0 0 4px;color:var(--verde-escuro)}
+@media (prefers-color-scheme:dark){h1{color:var(--lima)}}
+p.sub{margin:0 0 16px;opacity:.75;font-size:.9rem}
+label{display:block;font-weight:600;font-size:.85rem;margin:14px 0 6px}
+input{width:100%;padding:12px;font-size:1rem;border:1.5px solid var(--borda);border-radius:10px;background:var(--fundo);color:var(--texto)}
+input:focus{outline:3px solid rgba(141,198,63,.5);border-color:var(--verde)}
+input[readonly]{opacity:.8}
+button{cursor:pointer;border:0;border-radius:10px;padding:12px 18px;font-size:1rem;font-weight:700;color:#fff;background:linear-gradient(100deg,var(--verde-escuro),var(--verde));width:100%;margin-top:18px}
+button:hover{filter:brightness(1.08)}
+button:disabled{opacity:.6;cursor:wait}
+button.sec{background:transparent;color:var(--verde-escuro);border:1.5px solid var(--verde);width:auto;margin:0;padding:8px 14px;font-size:.85rem}
+@media (prefers-color-scheme:dark){button.sec{color:var(--lima);border-color:var(--lima)}}
+header button.sec{color:#fff;border-color:rgba(255,255,255,.8);margin-top:4px}
+nav{display:flex;gap:8px;margin-bottom:16px}
+nav button{margin:0;background:transparent;color:var(--texto);border:1.5px solid var(--borda)}
+nav button.on{background:linear-gradient(100deg,var(--verde-escuro),var(--verde));color:#fff;border-color:transparent}
+.msg{margin-top:14px;padding:10px 12px;border-radius:10px;font-size:.9rem;display:none}
+.msg.ok{display:block;background:rgba(141,198,63,.22);border:1px solid var(--lima)}
+.msg.err{display:block;background:rgba(190,35,35,.1);border:1px solid var(--erro);color:var(--erro)}
+.tw{overflow-x:auto;margin-top:14px}
+table{width:100%;border-collapse:collapse;font-size:.9rem}
+th,td{text-align:left;padding:9px 8px;border-bottom:1px solid var(--borda);white-space:nowrap}
+th{color:var(--verde-escuro)}
+@media (prefers-color-scheme:dark){th{color:var(--lima)}}
+.row{display:flex;gap:8px;align-items:end}
+.row>div{flex:1}
+.row button{width:auto;margin:0}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo" aria-label="CMAA - Energia que transforma">
+    <svg viewBox="0 0 250 80" xmlns="http://www.w3.org/2000/svg" role="img">
+      <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#d8eab8"/><stop offset=".5" stop-color="#8dc63f"/><stop offset="1" stop-color="#0c6830"/></linearGradient></defs>
+      <text x="125" y="36" text-anchor="middle" font-family="Arial Black,Arial,sans-serif" font-weight="900" font-size="38" fill="#1a1a1a" letter-spacing="1">CMAA</text>
+      <path d="M8 50 Q120 38 245 52 Q130 46 8 54Z M20 56 Q130 44 232 58 Q130 52 20 59Z M36 62 Q130 52 215 64 Q130 58 36 65Z" fill="url(#g)"/>
+      <text x="125" y="78" text-anchor="middle" font-family="Arial,sans-serif" font-weight="600" font-size="13" fill="#1a1a1a">Energia que transforma</text>
+    </svg>
+  </div>
+  <div id="quem" class="hide"><div id="usuario"></div><button class="sec" id="sair" type="button">Sair</button></div>
+</header>
+
+<main>
+  <!-- LOGIN -->
+  <section id="vLogin" class="card hide">
+    <h1>Entrar</h1>
+    <p class="sub">Acesso restrito a usuários autorizados.</p>
+    <label for="lUsuario">Usuário (C + matrícula)</label>
+    <input id="lUsuario" type="text" autocomplete="username" maxlength="21" placeholder="Ex.: C12345" autocapitalize="characters" required>
+    <label for="lSenha">Senha</label>
+    <input id="lSenha" type="password" autocomplete="current-password" required>
+    <button id="bLogin" type="button">Entrar</button>
+    <div id="mLogin" class="msg"></div>
+  </section>
+
+  <!-- APP -->
+  <section id="vApp" class="hide">
+    <nav>
+      <button id="tEntrega" class="on" type="button">Registrar entrega</button>
+      <button id="tConsulta" type="button">Consultar entregas</button>
+    </nav>
+
+    <div id="pEntrega" class="card">
+      <h1>Entrega de cesta de Natal</h1>
+      <p class="sub">Data e hora são registradas no momento do envio (horário de Brasília).</p>
+      <label for="fMat">Matrícula</label>
+      <input id="fMat" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="Digite a matrícula">
+      <label for="fData">Data e hora da entrega (Brasília)</label>
+      <input id="fData" readonly>
+      <label for="fResp">Responsável pela entrega</label>
+      <input id="fResp" readonly>
+      <button id="bEnviar" type="button">Registrar entrega</button>
+      <div id="mEntrega" class="msg"></div>
+    </div>
+
+    <div id="pConsulta" class="card hide">
+      <h1>Entregas registradas</h1>
+      <p class="sub" id="subC">Exibindo as entregas permitidas para o seu usuário.</p>
+      <div class="row">
+        <div><label for="qMat">Filtrar por matrícula</label><input id="qMat" maxlength="20" autocomplete="off"></div>
+        <button id="bBuscar" type="button">Buscar</button>
+      </div>
+      <div id="mConsulta" class="msg"></div>
+      <div class="tw"><table><thead><tr><th>Matrícula</th><th>Data/hora (Brasília)</th><th>Responsável</th></tr></thead><tbody id="tb"></tbody></table></div>
+    </div>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+/* ====== CONFIGURE AQUI (Project Settings > API) — use APENAS a chave anon/publishable ====== */
+const SUPABASE_URL = "https://ndextmemwshpfoklccnk.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_t9tSxZpwZWtXNrvJyZ2GjA_b7ViZpIP";
+// O Supabase Auth exige e-mail; o usuário "C12345" vira "c12345@DOMINIO" internamente (nenhum e-mail é enviado).
+// Use o MESMO domínio ao criar os usuários no painel.
+const DOMINIO = "@cmaa.ind.br";
+/* ========================================================================================== */
+
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth:{ persistSession:true, autoRefreshToken:true } });
+const $ = id => document.getElementById(id);
+const fmt = new Intl.DateTimeFormat("pt-BR",{timeZone:"America/Sao_Paulo",dateStyle:"short",timeStyle:"medium"});
+let user = null, timer = null;
+
+const nomeUsuario = u => String(u.email||"").split("@")[0].toUpperCase();
+function msg(id, texto, tipo){ const e=$(id); e.textContent=texto||""; e.className="msg"+(texto?" "+tipo:""); }
+function erroAmigavel(e){
+  const m=(e&&e.message)||"";
+  if(e&&(e.code==="PT429"||/Limite de 100/i.test(m)||e.status===429)) return "Limite de 100 requisições por hora atingido. Tente novamente mais tarde.";
+  if(e&&e.code==="23505") return "Esta matrícula já teve a cesta entregue.";
+  if(e&&e.code==="23514") return "Matrícula inválida (use de 3 a 20 letras/números).";
+  if(e&&(e.code==="42501"||e.status===401||e.status===403)) return "Sem permissão para esta operação.";
+  return "Não foi possível concluir. Tente novamente.";
+}
+
+function mostrar(logado){
+  $("vLogin").classList.toggle("hide",logado);
+  $("vApp").classList.toggle("hide",!logado);
+  $("quem").classList.toggle("hide",!logado);
+  clearInterval(timer);
+  if(logado){
+    $("usuario").textContent=nomeUsuario(user); $("fResp").value=nomeUsuario(user);
+    const tick=()=>{$("fData").value=fmt.format(new Date())}; tick(); timer=setInterval(tick,1000);
+  }
+}
+
+$("bLogin").onclick = async () => {
+  msg("mLogin","");
+  const usuario=$("lUsuario").value.trim().toLowerCase(), password=$("lSenha").value;
+  if(!usuario||!password) return msg("mLogin","Informe usuário e senha.","err");
+  if(!/^c[0-9a-z]{3,20}$/.test(usuario)) return msg("mLogin","Usuário deve ser a letra C seguida da matrícula.","err");
+  const email=usuario+"@"+DOMINIO;
+  $("bLogin").disabled=true;
+  const {data,error}=await sb.auth.signInWithPassword({email,password});
+  $("bLogin").disabled=false;
+  if(error) return msg("mLogin","Usuário ou senha inválidos.","err");
+  user=data.user; $("lSenha").value=""; mostrar(true);
+};
+$("lSenha").addEventListener("keydown",e=>{if(e.key==="Enter")$("bLogin").click()});
+
+$("sair").onclick = async () => { await sb.auth.signOut(); user=null; $("tb").replaceChildren(); mostrar(false); };
+
+function aba(consulta){
+  $("pEntrega").classList.toggle("hide",consulta);
+  $("pConsulta").classList.toggle("hide",!consulta);
+  $("tEntrega").classList.toggle("on",!consulta);
+  $("tConsulta").classList.toggle("on",consulta);
+  if(consulta) buscar();
+}
+$("tEntrega").onclick=()=>aba(false);
+$("tConsulta").onclick=()=>aba(true);
+
+$("bEnviar").onclick = async () => {
+  msg("mEntrega","");
+  const matricula=$("fMat").value.trim();
+  if(!/^[0-9A-Za-z]{3,20}$/.test(matricula)) return msg("mEntrega","Informe uma matrícula válida (3 a 20 letras/números).","err");
+  $("bEnviar").disabled=true;
+  // data/hora e responsável são definidos no servidor (now() e auth.uid()), não podem ser alterados pelo navegador
+  const {data,error}=await sb.from("entregas").insert({matricula}).select("matricula,entregue_em").single();
+  $("bEnviar").disabled=false;
+  if(error) return msg("mEntrega",erroAmigavel(error),"err");
+  msg("mEntrega",`Entrega registrada: matrícula ${data.matricula} em ${fmt.format(new Date(data.entregue_em))}.`,"ok");
+  $("fMat").value=""; $("fMat").focus();
+};
+
+async function buscar(){
+  msg("mConsulta","");
+  const q=$("qMat").value.trim();
+  let req=sb.from("entregas").select("matricula,entregue_em,entregue_por_usuario").order("entregue_em",{ascending:false}).limit(200);
+  if(q){ if(!/^[0-9A-Za-z]{1,20}$/.test(q)) return msg("mConsulta","Filtro inválido.","err"); req=req.eq("matricula",q); }
+  $("bBuscar").disabled=true;
+  const {data,error}=await req;
+  $("bBuscar").disabled=false;
+  if(error) return msg("mConsulta",erroAmigavel(error),"err");
+  const tb=$("tb"); tb.replaceChildren();
+  if(!data.length) return msg("mConsulta","Nenhuma entrega encontrada.","ok");
+  for(const r of data){
+    const tr=document.createElement("tr");
+    for(const v of [r.matricula,fmt.format(new Date(r.entregue_em)),String(r.entregue_por_usuario||"").toUpperCase()]){
+      const td=document.createElement("td"); td.textContent=v; tr.appendChild(td);
+    }
+    tb.appendChild(tr);
+  }
+}
+$("bBuscar").onclick=buscar;
+$("qMat").addEventListener("keydown",e=>{if(e.key==="Enter")buscar()});
+
+sb.auth.getSession().then(({data})=>{
+  user=data.session?data.session.user:null; mostrar(!!user);
+});
+sb.auth.onAuthStateChange((ev,s)=>{ if(ev==="SIGNED_OUT"){user=null;mostrar(false);} });
+</script>
+</body>
+</html>
