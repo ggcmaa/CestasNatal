@@ -8,7 +8,6 @@
 <link rel="icon" href="CMAA.png">
 <style>
 :root{
-  /* Paleta extraída do logo da CMAA */
   --preto:rgba(20,22,20,1);
   --verde-escuro:rgba(14,122,64,1);
   --verde-medio:rgba(88,150,74,1);
@@ -37,7 +36,7 @@ body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Aria
 /* Topo */
 header{background:var(--superficie);border-bottom:1px solid var(--linha);position:relative}
 header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px;background:var(--faixa)}
-.topo{max-width:960px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.topo{max-width:1050px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .marca{display:flex;align-items:center;gap:14px;min-width:0}
 .marca .placa{display:flex}
 .marca img{height:42px;width:auto;display:block}
@@ -48,7 +47,7 @@ header::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:4px
 .chip span{max-width:240px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* Estrutura */
-main{flex:1;width:100%;max-width:960px;margin:0 auto;padding:28px 20px 40px}
+main{flex:1;width:100%;max-width:1050px;margin:0 auto;padding:28px 20px 40px}
 footer{text-align:center;font-size:.8rem;color:var(--texto-suave);padding:18px 20px 26px}
 h1{font-size:1.5rem;line-height:1.2;margin:0 0 6px;letter-spacing:-.01em}
 p.sub{margin:0 0 22px;color:var(--texto-suave);font-size:.95rem;max-width:62ch}
@@ -58,7 +57,6 @@ p.sub{margin:0 0 22px;color:var(--texto-suave);font-size:.95rem;max-width:62ch}
 #vLogin{max-width:420px;margin:24px auto 0}
 #vLogin .painel{padding:30px 28px 28px;border-top:4px solid var(--verde-escuro);box-shadow:0 8px 28px rgba(14,122,64,.12)}
 #vLogin .logo-grande{display:flex;justify-content:center;margin-bottom:22px}
-#vLogin .logo-grande .placa{display:flex}
 #vLogin .logo-grande img{width:230px;max-width:100%;height:auto;display:block}
 #vLogin h1{text-align:center;font-size:1.3rem}
 #vLogin p.sub{text-align:center;margin-left:auto;margin-right:auto}
@@ -74,8 +72,6 @@ input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
 .mat-linha input{flex:1;min-width:0}
 .btn-qr{cursor:pointer;display:flex;align-items:center;gap:8px;min-height:56px;padding:0 16px;font:inherit;font-weight:700;font-size:.95rem;color:var(--acento);background:transparent;border:1.5px solid var(--acento);border-radius:8px;white-space:nowrap}
 .btn-qr:hover{background:var(--ok-fundo)}
-.btn-qr:focus-visible{outline:3px solid var(--foco);outline-offset:2px}
-.btn-qr svg{width:22px;height:22px}
 .leitor{margin-top:14px}
 .visor{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:4/3;max-height:60vh;margin:0 auto}
 .visor video{width:100%;height:100%;object-fit:cover;display:block}
@@ -85,17 +81,21 @@ input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
 @media(max-width:560px){.dois{grid-template-columns:1fr}}
 .btn{cursor:pointer;border:0;border-radius:8px;min-height:48px;padding:0 20px;font:inherit;font-weight:700;font-size:1rem;color:var(--acento-texto);background:var(--acento);width:100%;margin-top:22px;transition:filter .15s,transform .05s}
 .btn:hover{filter:brightness(1.1)}
-.btn:active{transform:translateY(1px)}
-.btn:disabled{opacity:.55;cursor:wait}
-.btn:focus-visible,.tab:focus-visible,.btn-sec:focus-visible{outline:3px solid var(--foco);outline-offset:2px}
 .btn-sec{cursor:pointer;font:inherit;font-weight:600;font-size:.88rem;color:var(--texto);background:transparent;border:1.5px solid var(--linha);border-radius:8px;min-height:36px;padding:0 14px}
 .btn-sec:hover{border-color:var(--acento);color:var(--acento)}
 
 /* Abas */
-.abas{display:flex;gap:4px;border-bottom:1px solid var(--linha);margin-bottom:22px}
-.tab{cursor:pointer;font:inherit;font-weight:600;font-size:.95rem;color:var(--texto-suave);background:none;border:0;border-bottom:3px solid transparent;padding:10px 16px;margin-bottom:-1px}
+.abas{display:flex;gap:4px;border-bottom:1px solid var(--linha);margin-bottom:22px;overflow-x:auto}
+.tab{cursor:pointer;font:inherit;font-weight:600;font-size:.95rem;color:var(--texto-suave);background:none;border:0;border-bottom:3px solid transparent;padding:10px 16px;margin-bottom:-1px;white-space:nowrap}
 .tab:hover{color:var(--texto)}
 .tab[aria-selected="true"]{color:var(--acento);border-bottom-color:var(--acento)}
+
+/* Dashboard Cards */
+.grid-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-bottom:24px}
+.card-kpi{background:var(--cinza);border:1px solid var(--linha);border-radius:8px;padding:18px}
+.card-kpi span{font-size:.85rem;font-weight:600;color:var(--texto-suave);text-transform:uppercase;letter-spacing:.03em}
+.card-kpi div{font-size:1.8rem;font-weight:700;margin-top:6px;color:var(--acento)}
+.card-kpi.alerta div{color:var(--erro)}
 
 /* Mensagens */
 .msg{display:none;margin-top:18px;padding:12px 14px;border-radius:8px;font-size:.95rem;border-left:4px solid}
@@ -103,7 +103,7 @@ input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
 .msg.err{display:block;background:var(--erro-fundo);border-color:var(--erro);color:var(--erro)}
 .msg strong{display:block;margin-bottom:2px}
 
-/* Consulta */
+/* Tabelas e Consultas */
 .barra{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
 .barra .f{flex:1;min-width:200px}
 .barra label{margin-top:0}
@@ -117,9 +117,9 @@ tbody tr:nth-child(even){background:var(--zebra)}
 tbody td{border-bottom:1px solid var(--linha)}
 tbody tr:last-child td{border-bottom:0}
 .vazio{padding:28px 14px;text-align:center;color:var(--texto-suave)}
+.escala-progresso{background:var(--linha);border-radius:4px;height:8px;width:100%;position:relative;overflow:hidden;margin-top:6px}
+.escala-barra{background:var(--acento);height:100%;border-radius:4px}
 .hide{display:none!important}
-@media(max-width:560px){.marca span{display:none}.marca img{height:36px}main{padding-top:20px}.painel{padding:18px}}
-@media(prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
@@ -143,7 +143,7 @@ tbody tr:last-child td{border-bottom:0}
   <!-- LOGIN -->
   <section id="vLogin" class="hide">
     <div class="painel">
-      <div class="logo-grande"><div class="placa"><img src="CMAA.png" alt="CMAA - Cia Mineira de Açúcar e Álcool"></div></div>
+      <div class="logo-grande"><img src="CMAA.png" alt="CMAA"></div>
       <h1>Acesse o sistema</h1>
       <p class="sub">Entre com seu usuário (a letra C seguida da matrícula) e sua senha.</p>
       <label for="lUsuario">Usuário</label>
@@ -159,18 +159,20 @@ tbody tr:last-child td{border-bottom:0}
   <section id="vApp" class="hide">
     <div class="abas" role="tablist">
       <button id="tEntrega" class="tab" role="tab" aria-selected="true" type="button">Registrar entrega</button>
+      <button id="tDashboard" class="tab" role="tab" aria-selected="false" type="button">Dashboard (Progresso)</button>
       <button id="tConsulta" class="tab" role="tab" aria-selected="false" type="button">Consultar entregas</button>
     </div>
 
+    <!-- REGISTRAR -->
     <div id="pEntrega">
       <h1>Registrar entrega</h1>
-      <p class="sub">Informe a matrícula do colaborador. A data e a hora são gravadas automaticamente no momento do envio, no horário de Brasília.</p>
+      <p class="sub">Informe a matrícula do colaborador. A validação é feita diretamente com a base de colaboradores.</p>
       <div class="painel">
         <label for="fMat" style="margin-top:0">Matrícula do colaborador</label>
         <div class="mat-linha">
           <input id="fMat" class="campo-grande num" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="Digite ou leia o QR code">
           <button id="bQr" class="btn-qr" type="button" aria-label="Ler QR code do crachá">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/><path d="M13 13h4v4"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/><path d="M13 13h4v4"/></svg>
             <span>Ler crachá</span>
           </button>
         </div>
@@ -187,9 +189,46 @@ tbody tr:last-child td{border-bottom:0}
       </div>
     </div>
 
+    <!-- DASHBOARD -->
+    <div id="pDashboard" class="hide">
+      <h1>Dashboard de Entregas por Unidade</h1>
+      <p class="sub">Acompanhe em tempo real o volume total de colaboradores, quantas cestas já foram entregues e o que falta entregar em cada unidade.</p>
+      
+      <div class="grid-cards">
+        <div class="card-kpi"><span>Total Colaboradores</span><div id="kTotal" class="num">-</div></div>
+        <div class="card-kpi"><span>Total Entregues</span><div id="kEntregues" class="num">-</div></div>
+        <div class="card-kpi alerta"><span>Falta Entregar</span><div id="kFaltam" class="num">-</div></div>
+        <div class="card-kpi"><span>Progresso Geral</span><div id="kProgresso" class="num">-</div></div>
+      </div>
+
+      <div class="painel">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h2 style="font-size:1.1rem; margin:0;">Detalhamento por Unidade</h2>
+          <button id="bAtualizarDash" class="btn-sec" type="button">Atualizar dados</button>
+        </div>
+        <div id="mDash" class="msg" role="alert"></div>
+        <div class="tw">
+          <table>
+            <thead>
+              <tr>
+                <th>Unidade</th>
+                <th>Colaboradores</th>
+                <th>Entregues</th>
+                <th>Falta Entregar</th>
+                <th>Progresso</th>
+              </tr>
+            </thead>
+            <tbody id="tbDash"></tbody>
+          </table>
+          <div id="vazioDash" class="vazio hide">Nenhum dado encontrado.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONSULTA -->
     <div id="pConsulta" class="hide">
       <h1>Entregas registradas</h1>
-      <p class="sub" id="subC">Todas as entregas registradas no sistema, por qualquer responsável. Busque pela matrícula para localizar um colaborador.</p>
+      <p class="sub" id="subC">Todas as entregas registradas no sistema, por qualquer responsável.</p>
       <div class="painel">
         <div class="barra">
           <div class="f"><label for="qMat">Buscar por matrícula</label><input id="qMat" class="num" maxlength="20" autocomplete="off" placeholder="Todas as matrículas"></div>
@@ -213,12 +252,9 @@ tbody tr:last-child td{border-bottom:0}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.js"></script>
 <script>
-/* ====== CONFIGURAÇÃO (use APENAS a chave anon/publishable) ====== */
 const SUPABASE_URL = "https://ndextmemwshpfoklccnk.supabase.co";
 const SUPABASE_ANON_KEY = "sb_publishable_t9tSxZpwZWtXNrvJyZ2GjA_b7ViZpIP";
-// O Supabase Auth exige e-mail: o usuário "C12345" vira "c12345@DOMINIO" internamente (nada é enviado).
 const DOMINIO = "cmaa.ind.br";
-/* ================================================================ */
 
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, { auth:{ persistSession:true, autoRefreshToken:true } });
 const $ = id => document.getElementById(id);
@@ -244,12 +280,11 @@ function msg(id, titulo, texto, tipo){
 function erroAmigavel(e){
   const m=(e&&e.message)||"";
   if(e&&(e.code==="PT429"||/Limite de 100/i.test(m)||e.status===429)) return "Limite de 100 requisições por hora atingido. Tente novamente mais tarde.";
-  if(e&&e.code==="23505") return "Esta matrícula já recebeu a cesta de Natal deste ano.";
+  if(e&&e.code==="23505") return "Esta matrícula já recebeu a cesta deste ano.";
   if(e&&e.code==="23503") return "Esta matrícula não está cadastrada na base de colaboradores.";
   if(e&&e.code==="23514") return "Matrícula inválida. Use de 3 a 20 letras ou números.";
   if(e&&(e.code==="42501"||e.status===401||e.status===403)) return "Você não tem permissão para esta operação.";
-  if(e&&(e.code==="42703"||e.code==="42P01"||e.code==="PGRST204"||e.code==="PGRST205")) return "A estrutura do banco está desatualizada. Rode o script supabase_setup.sql atualizado no Supabase.";
-  return `Não foi possível concluir (erro ${(e&&(e.code||e.status))||"desconhecido"}: ${String((e&&e.message)||"").slice(0,120)}). Tente novamente.`;
+  return `Não foi possível concluir (erro ${(e&&(e.code||e.status))||"desconhecido"}: ${String((e&&e.message)||"").slice(0,120)}).`;
 }
 
 function mostrar(logado){
@@ -260,7 +295,7 @@ function mostrar(logado){
   if(logado){
     carregarNome();
     const tick=()=>{$("fData").value=fmt.format(new Date())}; tick(); timer=setInterval(tick,1000);
-    aba(false);
+    alternarAba('entrega');
   } else { $("lUsuario").focus(); }
 }
 
@@ -268,7 +303,6 @@ $("bLogin").onclick = async () => {
   msg("mLogin","");
   const usuario=$("lUsuario").value.trim().toLowerCase(), password=$("lSenha").value;
   if(!usuario||!password) return msg("mLogin","Informe usuário e senha.","","err");
-  if(!/^c[0-9a-z]{3,20}$/.test(usuario)) return msg("mLogin","O usuário é a letra C seguida da matrícula.","","err");
   const email=usuario+"@"+DOMINIO.replace(/^@/,"");
   $("bLogin").disabled=true;
   const {data,error}=await sb.auth.signInWithPassword({email,password});
@@ -278,26 +312,70 @@ $("bLogin").onclick = async () => {
 };
 $("lSenha").addEventListener("keydown",e=>{if(e.key==="Enter")$("bLogin").click()});
 $("lUsuario").addEventListener("keydown",e=>{if(e.key==="Enter")$("lSenha").focus()});
+$("sair").onclick = async () => { await sb.auth.signOut(); user=null; mostrar(false); };
 
-$("sair").onclick = async () => { await sb.auth.signOut(); user=null; $("tb").replaceChildren(); mostrar(false); };
-
-function aba(consulta){
+/* Controle de Abas */
+function alternarAba(aba){
   pararLeitor();
-  $("pEntrega").classList.toggle("hide",consulta);
-  $("pConsulta").classList.toggle("hide",!consulta);
-  $("tEntrega").setAttribute("aria-selected",String(!consulta));
-  $("tConsulta").setAttribute("aria-selected",String(consulta));
-  if(consulta) buscar(); else $("fMat").focus();
+  const e = aba==='entrega', d = aba==='dashboard', c = aba==='consulta';
+  $("pEntrega").classList.toggle("hide", !e);
+  $("pDashboard").classList.toggle("hide", !d);
+  $("pConsulta").classList.toggle("hide", !c);
+  $("tEntrega").setAttribute("aria-selected", String(e));
+  $("tDashboard").setAttribute("aria-selected", String(d));
+  $("tConsulta").setAttribute("aria-selected", String(c));
+  if(e) $("fMat").focus();
+  if(d) carregarDashboard();
+  if(c) buscar();
 }
-$("tEntrega").onclick=()=>aba(false);
-$("tConsulta").onclick=()=>aba(true);
+$("tEntrega").onclick = () => alternarAba('entrega');
+$("tDashboard").onclick = () => alternarAba('dashboard');
+$("tConsulta").onclick = () => alternarAba('consulta');
 
+/* Carregar Dashboard */
+async function carregarDashboard(){
+  msg("mDash","");
+  const {data, error} = await sb.rpc("resumo_dashboard_entregas");
+  if(error) return msg("mDash", erroAmigavel(error), "", "err");
+
+  const tb = $("tbDash"); tb.replaceChildren();
+  $("vazioDash").classList.toggle("hide", data.length > 0);
+
+  let gColab = 0, gEntregues = 0;
+  for(const r of data){
+    gColab += Number(r.total_colaboradores);
+    gEntregues += Number(r.total_entregues);
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td class="num" style="font-weight:600">${r.unidade}</td>
+      <td class="num">${r.total_colaboradores}</td>
+      <td class="num">${r.total_entregues}</td>
+      <td class="num" style="color:var(--erro); font-weight:600">${r.falta_entregar}</td>
+      <td class="num" style="min-width:140px">
+        <div>${r.percentual_progresso}%</div>
+        <div class="escala-progresso"><div class="escala-barra" style="width: ${Math.min(100, r.percentual_progresso)}%"></div></div>
+      </td>
+    `;
+    tb.appendChild(tr);
+  }
+
+  const gFaltam = gColab - gEntregues;
+  const gPerc = gColab > 0 ? ((gEntregues / gColab) * 100).toFixed(1) : 0;
+
+  $("kTotal").textContent = gColab;
+  $("kEntregues").textContent = gEntregues;
+  $("kFaltam").textContent = gFaltam;
+  $("kProgresso").textContent = gPerc + "%";
+}
+$("bAtualizarDash").onclick = carregarDashboard;
+
+/* Registrar Entrega */
 $("bEnviar").onclick = async () => {
   msg("mEntrega","");
   const matricula=$("fMat").value.trim();
   if(!/^[0-9A-Za-z]{3,20}$/.test(matricula)) return msg("mEntrega","Informe uma matrícula válida (3 a 20 letras ou números).","","err");
   $("bEnviar").disabled=true;
-  // data/hora e responsável são definidos no servidor (now() e auth.uid()); o navegador não consegue alterá-los
   const {data:linhas,error}=await sb.rpc("registrar_entrega",{p_matricula:matricula});
   $("bEnviar").disabled=false;
   if(error) return msg("mEntrega",erroAmigavel(error),"","err");
@@ -307,13 +385,13 @@ $("bEnviar").onclick = async () => {
 };
 $("fMat").addEventListener("keydown",e=>{if(e.key==="Enter")$("bEnviar").click()});
 
-/* ===== Leitor de QR code do crachá ===== */
+/* Leitor QR Code */
 let stream=null, lendo=false, ultimoQuadro=0, avisou=false;
 const cv=document.createElement("canvas"), ctx=cv.getContext("2d",{willReadFrequently:true});
 function extrairMatricula(txt){
   const t=String(txt||"").trim();
-  if(/^[0-9A-Za-z]{3,20}$/.test(t)) return t;            // QR contém só a matrícula
-  const nums=t.match(/\d{3,20}/g);                       // QR com texto/URL: usa a maior sequência numérica
+  if(/^[0-9A-Za-z]{3,20}$/.test(t)) return t;
+  const nums=t.match(/\d{3,20}/g);
   return nums ? nums.sort((a,b)=>b.length-a.length)[0] : null;
 }
 function pararLeitor(){
@@ -324,13 +402,11 @@ function pararLeitor(){
 }
 async function iniciarLeitor(){
   msg("mEntrega","");
-  if(typeof jsQR==="undefined") return msg("mEntrega","Leitor indisponível","Não foi possível carregar o leitor de QR code. Verifique a conexão e recarregue a página.","err");
-  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia) return msg("mEntrega","Câmera indisponível","Este navegador não permite usar a câmera. Use um navegador atualizado, com o site aberto por HTTPS.","err");
+  if(typeof jsQR==="undefined") return msg("mEntrega","Leitor indisponível","Recarregue a página.","err");
   try{
     stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1280}},audio:false});
   }catch(e){
-    const negado=e&&(e.name==="NotAllowedError"||e.name==="SecurityError");
-    return msg("mEntrega",negado?"Acesso à câmera bloqueado":"Câmera não encontrada",negado?"Permita o uso da câmera nas configurações do navegador e tente de novo.":"Verifique se o aparelho tem uma câmera disponível.","err");
+    return msg("mEntrega","Acesso à câmera bloqueado","Permita o uso da câmera no navegador.","err");
   }
   const v=$("video"); v.srcObject=stream; await v.play().catch(()=>{});
   avisou=false; $("leitor").classList.remove("hide"); lendo=true; requestAnimationFrame(varrer);
@@ -352,7 +428,6 @@ function varrer(t){
         msg("mEntrega","Matrícula lida: "+m,"Confira o número e toque em Registrar entrega.","ok");
         $("bEnviar").focus(); return;
       }
-      if(!avisou){ avisou=true; msg("mEntrega","QR code não reconhecido","O código lido não contém uma matrícula. Tente outro crachá ou digite o número.","err"); }
     }
   }
   requestAnimationFrame(varrer);
@@ -360,18 +435,15 @@ function varrer(t){
 $("bQr").onclick=iniciarLeitor;
 $("bFechar").onclick=pararLeitor;
 
+/* Consulta */
 async function buscar(){
   msg("mConsulta","");
   const q=$("qMat").value.trim();
-  if(q && !/^[0-9A-Za-z]{1,20}$/.test(q)) return msg("mConsulta","Matrícula inválida para busca.","","err");
-  const req=sb.rpc("listar_entregas",{p_matricula:q||null});
-  $("bBuscar").disabled=true;
-  const {data,error}=await req;
-  $("bBuscar").disabled=false;
+  const {data,error}=await sb.rpc("listar_entregas",{p_matricula:q||null});
   if(error) return msg("mConsulta",erroAmigavel(error),"","err");
   const tb=$("tb"); tb.replaceChildren();
   $("vazio").classList.toggle("hide",data.length>0);
-  $("resumo").textContent = data.length ? `${data.length} ${data.length===1?"entrega":"entregas"}${data.length===200?" (mostrando as 200 mais recentes)":""}` : "";
+  $("resumo").textContent = data.length ? `${data.length} ${data.length===1?"entrega":"entregas"}` : "";
   for(const r of data){
     const tr=document.createElement("tr");
     const usr=String(r.entregue_por_usuario||"").toUpperCase();
