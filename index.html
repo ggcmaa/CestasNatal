@@ -72,7 +72,7 @@ p.sub{margin:0 0 18px;color:var(--texto-suave);font-size:.9rem;max-width:65ch}
 
 /* Formulários e Inputs */
 label{display:block;font-weight:600;font-size:.85rem;margin:14px 0 6px}
-input{width:100%;min-height:44px;padding:8px 12px;font:inherit;font-size:1rem;border:1.5px solid var(--linha);border-radius:8px;background:var(--superficie);color:var(--texto);transition:border-color .15s,box-shadow .15s}
+input[type="text"], input[type="password"], input:not([type="radio"]){width:100%;min-height:44px;padding:8px 12px;font:inherit;font-size:1rem;border:1.5px solid var(--linha);border-radius:8px;background:var(--superficie);color:var(--texto);transition:border-color .15s,box-shadow .15s}
 input::placeholder{color:var(--texto-suave);opacity:.7}
 input:focus-visible{outline:none;border-color:var(--acento);box-shadow:0 0 0 4px var(--foco)}
 input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
@@ -86,6 +86,17 @@ input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
 @media(min-width:768px){.btn-qr{min-height:56px; padding:0 16px}}
 .btn-qr:hover{background:var(--ok-fundo)}
 
+/* Seletor de Retirada */
+.tipo-retirada{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px}
+.radio-card{position:relative;cursor:pointer;margin:0}
+.radio-card input{position:absolute;opacity:0;pointer-events:none}
+.radio-card span{display:flex;align-items:center;justify-content:center;text-align:center;min-height:44px;padding:8px 12px;border:1.5px solid var(--linha);border-radius:8px;font-weight:600;font-size:.88rem;color:var(--texto-suave);background:var(--superficie);transition:all .15s}
+.radio-card input:checked + span{border-color:var(--acento);background:var(--ok-fundo);color:var(--acento)}
+.radio-card input:focus-visible + span{box-shadow:0 0 0 4px var(--foco)}
+
+.box-responsavel{margin-top:14px;padding:14px;background:var(--cinza);border:1px solid var(--linha);border-radius:8px}
+.box-responsavel label{margin-top:0}
+
 .leitor{margin-top:14px}
 .visor{position:relative;background:#000;border-radius:10px;overflow:hidden;aspect-ratio:4/3;max-height:55vh;width:100%;margin:0 auto}
 .visor video{width:100%;height:100%;object-fit:cover;display:block}
@@ -97,6 +108,7 @@ input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
 
 .btn{cursor:pointer;border:0;border-radius:8px;min-height:46px;padding:0 18px;font:inherit;font-weight:700;font-size:1rem;color:var(--acento-texto);background:var(--acento);width:100%;margin-top:18px;transition:filter .15s,transform .05s}
 .btn:hover{filter:brightness(1.1)}
+.btn:disabled{opacity:.6;cursor:not-allowed}
 .btn-sec{cursor:pointer;font:inherit;font-weight:600;font-size:.85rem;color:var(--texto);background:transparent;border:1.5px solid var(--linha);border-radius:8px;min-height:36px;padding:0 12px}
 .btn-sec:hover{border-color:var(--acento);color:var(--acento)}
 
@@ -119,10 +131,10 @@ input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
 .card-kpi.alerta div{color:var(--erro)}
 
 /* Mensagens */
-.msg{display:none;margin-top:16px;padding:10px 12px;border-radius:8px;font-size:.9rem;border-left:4px solid}
+.msg{display:none;margin-top:16px;padding:12px 14px;border-radius:8px;font-size:.92rem;border-left:4px solid;line-height:1.45}
 .msg.ok{display:block;background:var(--ok-fundo);border-color:var(--acento)}
 .msg.err{display:block;background:var(--erro-fundo);border-color:var(--erro);color:var(--erro)}
-.msg strong{display:block;margin-bottom:2px}
+.msg strong{display:block;margin-bottom:3px;font-size:.98rem}
 
 /* Consulta e Tabelas */
 .barra{display:flex;gap:10px;align-items:end;flex-wrap:wrap}
@@ -133,12 +145,13 @@ input[readonly]{background:var(--cinza);color:var(--texto-suave);cursor:default}
 
 .resumo{margin:16px 0 6px;font-size:.85rem;color:var(--texto-suave)}
 .tw{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--linha);border-radius:8px;margin-top:4px}
-table{width:100%;border-collapse:collapse;font-size:.9rem;min-width:500px}
+table{width:100%;border-collapse:collapse;font-size:.88rem;min-width:650px}
 th,td{text-align:left;padding:10px 12px;white-space:nowrap}
 thead th{background:var(--cinza);font-weight:700;font-size:.8rem;color:var(--texto-suave);border-bottom:1px solid var(--linha)}
 tbody tr:nth-child(even){background:var(--zebra)}
 tbody td{border-bottom:1px solid var(--linha)}
 tbody tr:last-child td{border-bottom:0}
+.badge-terceiro{display:inline-block;font-size:.72rem;font-weight:700;padding:2px 6px;border-radius:4px;background:rgba(190,210,100,.35);color:var(--preto);margin-left:6px;vertical-align:middle}
 .vazio{padding:24px 12px;text-align:center;color:var(--texto-suave);font-size:.9rem}
 .escala-progresso{background:var(--linha);border-radius:4px;height:8px;width:100%;position:relative;overflow:hidden;margin-top:6px}
 .escala-barra{background:var(--acento);height:100%;border-radius:4px}
@@ -192,21 +205,49 @@ tbody tr:last-child td{border-bottom:0}
       <h1>Registrar entrega</h1>
       <p class="sub">Informe a matrícula do colaborador ou leia o QR code do crachá.</p>
       <div class="painel">
-        <label for="fMat" style="margin-top:0">Matrícula do colaborador</label>
+        <label for="fMat" style="margin-top:0">Matrícula do colaborador (titular da cesta)</label>
         <div class="mat-linha">
           <input id="fMat" class="campo-grande num" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="Digite ou leia QR code">
-          <button id="bQr" class="btn-qr" type="button" aria-label="Ler QR code do crachá">
+          <button id="bQr" class="btn-qr" type="button" aria-label="Ler QR code do crachá do colaborador">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/><path d="M13 13h4v4"/></svg>
             <span>Ler crachá</span>
           </button>
         </div>
+
+        <label>Quem está retirando a cesta?</label>
+        <div class="tipo-retirada">
+          <label class="radio-card">
+            <input type="radio" name="tipoRetirada" value="COLABORADOR" checked>
+            <span>O próprio colaborador</span>
+          </label>
+          <label class="radio-card">
+            <input type="radio" name="tipoRetirada" value="RESPONSAVEL">
+            <span>Responsável / Terceiro</span>
+          </label>
+        </div>
+
+        <div id="boxRespRetirada" class="box-responsavel hide">
+          <label for="fMatResp">Matrícula do responsável que está retirando</label>
+          <div class="mat-linha">
+            <input id="fMatResp" class="campo-grande num" inputmode="numeric" maxlength="20" autocomplete="off" placeholder="Digite ou leia o crachá do responsável">
+            <button id="bQrResp" class="btn-qr" type="button" aria-label="Ler QR code do crachá do responsável">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M3 8V5a2 2 0 0 1 2-2h3M16 3h3a2 2 0 0 1 2 2v3M21 16v3a2 2 0 0 1-2 2h-3M8 21H5a2 2 0 0 1-2-2v-3"/><rect x="7" y="7" width="4" height="4"/><rect x="13" y="7" width="4" height="4"/><rect x="7" y="13" width="4" height="4"/><path d="M13 13h4v4"/></svg>
+              <span>Ler crachá do responsável</span>
+            </button>
+          </div>
+        </div>
+
         <div id="leitor" class="leitor hide">
           <div class="visor"><video id="video" playsinline muted></video><div class="mira"></div></div>
-          <div class="leitor-rodape"><span>Aponte a câmera para o QR code do crachá.</span><button id="bFechar" class="btn-sec" type="button">Cancelar</button></div>
+          <div class="leitor-rodape">
+            <span id="lblLeitor">Aponte a câmera para o QR code do crachá.</span>
+            <button id="bFechar" class="btn-sec" type="button">Cancelar</button>
+          </div>
         </div>
+
         <div class="dois">
           <div><label for="fData">Data e hora (Brasília)</label><input id="fData" class="num" readonly tabindex="-1"></div>
-          <div><label for="fResp">Responsável pela entrega</label><input id="fResp" class="num" readonly tabindex="-1"></div>
+          <div><label for="fResp">Operador que entregou</label><input id="fResp" class="num" readonly tabindex="-1"></div>
         </div>
         <button id="bEnviar" class="btn" type="button">Registrar entrega</button>
         <div id="mEntrega" class="msg" role="status"></div>
@@ -252,7 +293,7 @@ tbody tr:last-child td{border-bottom:0}
     <!-- CONSULTA -->
     <div id="pConsulta" class="hide">
       <h1>Entregas registradas</h1>
-      <p class="sub" id="subC">Todas as entregas registradas no sistema, por qualquer responsável.</p>
+      <p class="sub" id="subC">Todas as entregas registradas no sistema, por qualquer operador.</p>
       <div class="painel">
         <div class="barra">
           <div class="f"><label for="qMat">Buscar por matrícula</label><input id="qMat" class="num" maxlength="20" autocomplete="off" placeholder="Todas as matrículas"></div>
@@ -262,7 +303,15 @@ tbody tr:last-child td{border-bottom:0}
         <div id="resumo" class="resumo num"></div>
         <div class="tw">
           <table>
-            <thead><tr><th>Matrícula do colaborador</th><th>Data e hora (Brasília)</th><th>Entregue por</th><th>Usuário</th></tr></thead>
+            <thead>
+              <tr>
+                <th>Matrícula</th>
+                <th>Colaborador</th>
+                <th>Retirado por</th>
+                <th>Data e hora (Brasília)</th>
+                <th>Entregue por (Operador)</th>
+              </tr>
+            </thead>
             <tbody id="tb"></tbody>
           </table>
           <div id="vazio" class="vazio hide">Nenhuma entrega encontrada.</div>
@@ -305,7 +354,10 @@ function erroAmigavel(e){
   const m=(e&&e.message)||"";
   if(e&&(e.code==="PT429"||/Limite de 100/i.test(m)||e.status===429)) return "Limite de 100 requisições por hora atingido. Tente novamente mais tarde.";
   if(e&&e.code==="23505") return "Esta matrícula já recebeu a cesta deste ano.";
-  if(e&&e.code==="23503") return "Esta matrícula não está cadastrada na base de colaboradores.";
+  if(e&&e.code==="23503"){
+    if(/responsável/i.test(m)) return "A matrícula do responsável não está cadastrada na base de colaboradores.";
+    return "Esta matrícula não está cadastrada na base de colaboradores.";
+  }
   if(e&&e.code==="23514") return "Matrícula inválida. Use de 3 a 20 letras ou números.";
   if(e&&(e.code==="42501"||e.status===401||e.status===403)) return "Você não tem permissão para esta operação.";
   return `Não foi possível concluir (erro ${(e&&(e.code||e.status))||"desconhecido"}: ${String((e&&e.message)||"").slice(0,120)}).`;
@@ -355,6 +407,24 @@ $("tEntrega").onclick = () => alternarAba('entrega');
 $("tDashboard").onclick = () => alternarAba('dashboard');
 $("tConsulta").onclick = () => alternarAba('consulta');
 
+/* Alternar entre Próprio Colaborador e Responsável */
+function getTipoRetirada(){
+  const sel = document.querySelector('input[name="tipoRetirada"]:checked');
+  return sel ? sel.value : "COLABORADOR";
+}
+document.querySelectorAll('input[name="tipoRetirada"]').forEach(radio => {
+  radio.addEventListener("change", () => {
+    pararLeitor();
+    const isResp = getTipoRetirada() === "RESPONSAVEL";
+    $("boxRespRetirada").classList.toggle("hide", !isResp);
+    if(isResp){
+      $("fMatResp").focus();
+    } else {
+      $("fMatResp").value = "";
+    }
+  });
+});
+
 async function carregarDashboard(){
   msg("mDash","");
   const {data, error} = await sb.rpc("resumo_dashboard_entregas");
@@ -394,19 +464,59 @@ $("bAtualizarDash").onclick = carregarDashboard;
 
 $("bEnviar").onclick = async () => {
   msg("mEntrega","");
-  const matricula=$("fMat").value.trim();
-  if(!/^[0-9A-Za-z]{3,20}$/.test(matricula)) return msg("mEntrega","Informe uma matrícula válida (3 a 20 letras ou números).","","err");
-  $("bEnviar").disabled=true;
-  const {data:linhas,error}=await sb.rpc("registrar_entrega",{p_matricula:matricula});
-  $("bEnviar").disabled=false;
-  if(error) return msg("mEntrega",erroAmigavel(error),"","err");
-  const r=Array.isArray(linhas)?linhas[0]:linhas;
-  msg("mEntrega","Entrega registrada",`Matrícula ${r.matricula}, em ${fmt.format(new Date(r.entregue_em))}.`,"ok");
-  $("fMat").value=""; $("fMat").focus();
-};
-$("fMat").addEventListener("keydown",e=>{if(e.key==="Enter")$("bEnviar").click()});
+  const matricula = $("fMat").value.trim();
+  const tipoRetirada = getTipoRetirada();
+  const matResp = $("fMatResp").value.trim();
 
-let stream=null, lendo=false, ultimoQuadro=0, avisou=false;
+  if(!/^[0-9A-Za-z]{3,20}$/.test(matricula)){
+    return msg("mEntrega","Informe uma matrícula válida para o colaborador (3 a 20 letras ou números).","","err");
+  }
+  if(tipoRetirada === "RESPONSAVEL" && !/^[0-9A-Za-z]{3,20}$/.test(matResp)){
+    $("fMatResp").focus();
+    return msg("mEntrega","Informe uma matrícula válida para o responsável que está retirando.","","err");
+  }
+
+  $("bEnviar").disabled=true;
+  const {data:linhas,error}=await sb.rpc("registrar_entrega",{
+    p_matricula: matricula,
+    p_retirado_por_tipo: tipoRetirada,
+    p_retirado_por_matricula: tipoRetirada === "RESPONSAVEL" ? matResp : null
+  });
+  $("bEnviar").disabled=false;
+
+  if(error) return msg("mEntrega",erroAmigavel(error),"","err");
+
+  const r=Array.isArray(linhas)?linhas[0]:linhas;
+  const infoColab = r.nome_colaborador ? `${r.matricula} - ${r.nome_colaborador}` : `Matrícula ${r.matricula}`;
+  const infoRetirada = (tipoRetirada === "RESPONSAVEL" && r.retirado_por_nome) 
+    ? ` | Retirado por: ${r.retirado_por_nome} (${matResp})` 
+    : "";
+
+  msg(
+    "mEntrega",
+    "Entrega registrada com sucesso!",
+    `Colaborador: ${infoColab}${infoRetirada} · Em ${fmt.format(new Date(r.entregue_em))}.`,
+    "ok"
+  );
+
+  // Reseta campos para a próxima entrega
+  $("fMat").value="";
+  $("fMatResp").value="";
+  document.querySelector('input[name="tipoRetirada"][value="COLABORADOR"]').checked = true;
+  $("boxRespRetirada").classList.add("hide");
+  $("fMat").focus();
+};
+
+$("fMat").addEventListener("keydown",e=>{
+  if(e.key==="Enter"){
+    if(getTipoRetirada() === "RESPONSAVEL" && !$("fMatResp").value.trim()) $("fMatResp").focus();
+    else $("bEnviar").click();
+  }
+});
+$("fMatResp").addEventListener("keydown",e=>{if(e.key==="Enter")$("bEnviar").click()});
+
+/* Leitor QR Code compartilhado (Colaborador ou Responsável) */
+let stream=null, lendo=false, ultimoQuadro=0, alvoLeitor="COLABORADOR";
 const cv=document.createElement("canvas"), ctx=cv.getContext("2d",{willReadFrequently:true});
 function extrairMatricula(txt){
   const t=String(txt||"").trim();
@@ -420,16 +530,21 @@ function pararLeitor(){
   const v=$("video"); if(v) v.srcObject=null;
   const l=$("leitor"); if(l) l.classList.add("hide");
 }
-async function iniciarLeitor(){
+async function iniciarLeitor(alvo){
+  alvoLeitor = alvo;
   msg("mEntrega","");
   if(typeof jsQR==="undefined") return msg("mEntrega","Leitor indisponível","Recarregue a página.","err");
+  if(stream) pararLeitor();
   try{
     stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:"environment"},width:{ideal:1280}},audio:false});
   }catch(e){
     return msg("mEntrega","Acesso à câmera bloqueado","Permita o uso da câmera no navegador.","err");
   }
+  $("lblLeitor").textContent = alvo === "RESPONSAVEL" 
+    ? "Aponte a câmera para o QR code do crachá do RESPONSÁVEL." 
+    : "Aponte a câmera para o QR code do crachá do COLABORADOR.";
   const v=$("video"); v.srcObject=stream; await v.play().catch(()=>{});
-  avisou=false; $("leitor").classList.remove("hide"); lendo=true; requestAnimationFrame(varrer);
+  $("leitor").classList.remove("hide"); lendo=true; requestAnimationFrame(varrer);
 }
 function varrer(t){
   if(!lendo) return;
@@ -444,15 +559,26 @@ function varrer(t){
     if(r&&r.data){
       const m=extrairMatricula(r.data);
       if(m){
-        pararLeitor(); $("fMat").value=m; if(navigator.vibrate) navigator.vibrate(120);
-        msg("mEntrega","Matrícula lida: "+m,"Confira o número e toque em Registrar entrega.","ok");
-        $("bEnviar").focus(); return;
+        pararLeitor();
+        if(navigator.vibrate) navigator.vibrate(120);
+        if(alvoLeitor === "RESPONSAVEL"){
+          $("fMatResp").value=m;
+          msg("mEntrega","Crachá do responsável lido: "+m,"Confira os dados e toque em Registrar entrega.","ok");
+          $("bEnviar").focus();
+        } else {
+          $("fMat").value=m;
+          msg("mEntrega","Matrícula do colaborador lida: "+m,"Confira o número e toque em Registrar entrega.","ok");
+          if(getTipoRetirada() === "RESPONSAVEL" && !$("fMatResp").value.trim()) $("fMatResp").focus();
+          else $("bEnviar").focus();
+        }
+        return;
       }
     }
   }
   requestAnimationFrame(varrer);
 }
-$("bQr").onclick=iniciarLeitor;
+$("bQr").onclick=()=>iniciarLeitor("COLABORADOR");
+$("bQrResp").onclick=()=>iniciarLeitor("RESPONSAVEL");
 $("bFechar").onclick=pararLeitor;
 
 async function buscar(){
@@ -463,12 +589,31 @@ async function buscar(){
   const tb=$("tb"); tb.replaceChildren();
   $("vazio").classList.toggle("hide",data.length>0);
   $("resumo").textContent = data.length ? `${data.length} ${data.length===1?"entrega":"entregas"}` : "";
+
   for(const r of data){
     const tr=document.createElement("tr");
     const usr=String(r.entregue_por_usuario||"").toUpperCase();
-    for(const v of [r.matricula,fmt.format(new Date(r.entregue_em)),r.entregue_por_nome||usr,usr]){
-      const td=document.createElement("td"); td.className="num"; td.textContent=v; tr.appendChild(td);
+    const operador = r.entregue_por_nome ? `${r.entregue_por_nome} (${usr})` : usr;
+
+    // Monta célula de quem retirou
+    const tdRetirada = document.createElement("td");
+    tdRetirada.className = "num";
+    if(r.retirado_por_tipo === "RESPONSAVEL"){
+      tdRetirada.textContent = `${r.retirado_por_nome || ""} (${r.retirado_por_matricula || ""})`;
+      const badge = document.createElement("span");
+      badge.className = "badge-terceiro";
+      badge.textContent = "Responsável";
+      tdRetirada.appendChild(badge);
+    } else {
+      tdRetirada.textContent = r.nome_colaborador || "O próprio colaborador";
     }
+
+    const tdMat = document.createElement("td"); tdMat.className="num"; tdMat.textContent=r.matricula;
+    const tdColab = document.createElement("td"); tdColab.textContent=r.nome_colaborador || "-";
+    const tdData = document.createElement("td"); tdData.className="num"; tdData.textContent=fmt.format(new Date(r.entregue_em));
+    const tdOp = document.createElement("td"); tdOp.className="num"; tdOp.textContent=operador;
+
+    tr.append(tdMat, tdColab, tdRetirada, tdData, tdOp);
     tb.appendChild(tr);
   }
 }
